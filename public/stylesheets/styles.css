@@ -1,5 +1,4 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -20,20 +19,7 @@ header {
   padding: 10px 20px;
   position: relative;
 }
-/* Search line centered */
-.search-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-.search-container input[type="text"] {
-  width: 50%;
-  padding: 7px 10px;
-  font-size: 16px;
-  border-radius: 20px;
-  border: none;
-  outline: none;
-}
+
 /* Logo and nickname on right */
 .profile {
   display: flex;
@@ -41,6 +27,7 @@ header {
   cursor: pointer;
   position: relative;
   margin-left: 20px;
+  justify-content: right;
 }
 .logo {
   width: 36px;
