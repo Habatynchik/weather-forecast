@@ -1,10 +1,11 @@
 const API_KEY = '7d68e4099ddbe436ed8eb46a4b753984';
 
 function getWeatherIcon(condition) {
-    if (condition.includes('rain')) return '/icons/rain.png';
-    if (condition.includes('cloud')) return '/icons/cloudy.png';
-    if (condition.includes('clear')) return '/icons/sunny.png';
-    if (condition.includes('snow')) return '/icons/snow.png';
+    condition = condition.toLowerCase();
+    if (condition.includes('rain')) return '/icons/icons8-rain.gif';
+    if (condition.includes('cloud')) return '/icons/icons8-party-cloudy-day.gif';
+    if (condition.includes('clear')) return '/icons/icons8-cloud.gif';
+    if (condition.includes('snow')) return '/icons/icons8-light-snow.gif';
     return '/icons/default.png';
 }
 
@@ -26,7 +27,7 @@ function groupByDay(list) {
             condition: item.weather[0].description
         });
     });
-    return Object.entries(days).slice(0, 4); // тільки 4 дні
+    return Object.entries(days).slice(0, 4);
 }
 
 function createChart(ctx, labels, data) {
@@ -62,13 +63,12 @@ async function renderForecast(city) {
         const icon = getWeatherIcon(condition);
 
         div.innerHTML = `
-      <h3>${day}</h3>
-      <img src="${icon}" alt="${condition}" class="weather-icon">
-      <canvas id="chart-${i}" width="300" height="200"></canvas>
-    `;
+            <h3>${day}</h3>
+            <img src="${icon}" alt="${condition}" class="weather-icon">
+            <canvas id="chart-${i}" width="300" height="100"></canvas>
+        `;
 
         container.appendChild(div);
-
         const ctx = document.getElementById(`chart-${i}`);
         createChart(ctx, entries.map(e => e.time), entries.map(e => e.temp));
     });
