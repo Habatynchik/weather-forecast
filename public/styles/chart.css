@@ -1,22 +1,23 @@
 body {
+    min-height: 100vh;
     font-family: Arial, sans-serif;
     padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 2px 6px rgba(3, 2, 0, 0.1);
+    background: linear-gradient(to bottom right, #4a90e2, #50e3c2);
 }
 
 #forecast-container {
     display: flex;
-    flex-direction: row; /* Горизонтально */
-    flex-wrap: wrap;     /* Щоб переносилось, якщо не вміщається */
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 20px; /* Відстань між блоками */
+    gap: 20px;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 .forecast-day {
     display: flex;
-    flex-direction: column; /* Вертикально всередині одного дня */
+    flex-direction: column;
     align-items: center;
     background-color: #f0f8ff;
     border-radius: 12px;
