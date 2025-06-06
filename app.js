@@ -39,4 +39,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+app.use('/scripts', express.static(path.join(__dirname, 'public/scripts')));
+app.use('/styles', express.static(path.join(__dirname, 'public/styles')));
 module.exports = app;

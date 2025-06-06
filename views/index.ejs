@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="chart/.js"></script>
@@ -15,9 +14,15 @@
 </head>
 
 <body>
-<div class="myChart">
-    <canvas id="myChart"></canvas>
-</div>
+<label for="city">Оберіть місто:</label>
+<select id="city">
+    <option value="Kyiv">Kyiv</option>
+    <option value="Odesa">Odesa</option>
+    <option value="Lviv">Lviv</option>
+    <option value="Kharkiv">Kharkiv</option>
+</select>
+
+<div id="forecast-container"></div>
 </body>
 
 </html>
