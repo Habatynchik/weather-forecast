@@ -6,40 +6,48 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-const config = {
-  type: 'line',
-  data: data,
-  options: {
-    plugins: {
-      filler: {
-        propagate: false,
-      },
-      title: {
-        display: true,
-        text: (ctx) => 'Fill: ' + ctx.chart.data.datasets[0].fill
-      }
-    },
-    interaction: {
-      intersect: false,
+$(document).ready(async function () {
+  let API_KEY = "9afa599e312051b0ab45fcd866141e75"
+  let q = "Kyiv"
+
+  let data = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${q}&appid=${API_KEY}&units=metric`, {
+    method: "GET"
+  })
+
+  data = await data.json()
+
+  console.log(data.list)
+
+
+  let arr = []
+  data.list.forEach(element => {
+    if (!arr[new Date(element.dt_txt).getDay()]) {
+      arr.push([])
     }
-  },
-};
-const config = {
-  type: 'line',
-  data: data,
-  options: {
-    plugins: {
-      filler: {
-        propagate: false,
-      },
-      title: {
-        display: true,
-        text: (ctx) => 'Fill: ' + ctx.chart.data.datasets[0].fill
-      }
+    arr[new Date(element.dt_txt).getDay()].push({
+      temp: element.main.temp,
+      time: `${new Date(element.dt_txt).getHours()} hour`
+    })
+  });
+
+
+  console.log(arr)
+
+
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: arr[1].map(e => e.time),
+      datasets: [{
+        label: 'Temp',
+        data: arr[1].map(e => e.temp),
+        borderWidth: 3
+      }]
     },
-    interaction: {
-      intersect: false,
-    }
-  },
-};
+
+  });
+});
+
 module.exports = router;
