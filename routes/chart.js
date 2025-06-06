@@ -1,53 +1,72 @@
-var express = require('express');
-var router = express.Router();
+const API_KEY = '7d68e4099ddbe436ed8eb46a4b753984';
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
-});
+$('#search').click(async () => {
+    const q = $('#city').val();
+    const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${q}&appid=${API_KEY}&units=metric`);
+    const json = await res.json();
+    const list = json.list;
 
-$(document).ready(async function () {
-    let API_KEY = "7d68e4099ddbe436ed8eb46a4b753984"
-    let q = "Kyiv"
+    const days = {};
 
-    let data = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${q}&appid=${API_KEY}&units=metric`, {
-        method: "GET"
-    })
+    list.forEach(item => {
+        const date = new Date(item.dt_txt);
+        const day = date.toISOString().split('T')[0];
 
-    data = await data.json()
-
-    console.log(data.list)
-
-
-    let arr = []
-    data.list.forEach(element => {
-        if (!arr[new Date(element.dt_txt).getDay()]) {
-            arr.push([])
-        }
-        arr[new Date(element.dt_txt).getDay()].push({
-            temp: element.main.temp,
-            time: `${new Date(element.dt_txt).getHours()} hour`
-        })
+        if (!days[day]) days[day] = [];
+        days[day].push({
+            temp: item.main.temp,
+            time: `${date.getHours()}:00`,
+            weather: item.weather[0]
+        });
     });
 
+    const container = $('#forecast');
+    container.empty();
 
-    console.log(arr)
+    Object.keys(days).slice(0, 4).forEach((day, i) => {
+        const chartId = `chart-${i}`;
+        const iconUrl = getWeatherIcon(days[day]);
 
+        container.append(`
+            <div class="day-forecast">
+                <div class="weather-icon"><img src="${iconUrl}" alt="icon"></div>
+                <canvas id="${chartId}" height="200"></canvas>
+            </div>
+        `);
 
-    const ctx = document.getElementById('myChart');
-
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: arr[1].map(e => e.time),
-            datasets: [{
-                label: 'Temp',
-                data: arr[1].map(e => e.temp),
-                borderWidth: 3
-            }]
-        },
-
+        new Chart(document.getElementById(chartId), {
+            type: 'line',
+            data: {
+                labels: days[day].map(e => e.time),
+                datasets: [{
+                    label: 'Temp (°C)',
+                    data: days[day].map(e => e.temp),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
     });
 });
 
-module.exports = router;
+function getWeatherIcon(entries) {
+    // Пріоритет: дощ > вітер > сонце > інше
+    let rain = entries.some(e => e.weather.main.toLowerCase().includes('rain'));
+    let wind = entries.some(e => e.weather.main.toLowerCase().includes('wind'));
+    let clear = entries.some(e => e.weather.main.toLowerCase().includes('clear'));
+
+    if (rain) return 'https://openweathermap.org/img/wn/10d.png';
+    if (wind) return 'https://openweathermap.org/img/wn/50d.png';
+    if (clear) return 'https://openweathermap.org/img/wn/01d.png';
+
+    return 'https://openweathermap.org/img/wn/03d.png'; // default: clouds
+}

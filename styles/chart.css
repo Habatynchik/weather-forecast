@@ -1,4 +1,18 @@
-.myChart{
-    width: 500px;
-    height: 500px;
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f3f3;
+    margin: 20px;
+}
+
+.day-forecast {
+    background: white;
+    margin: 20px 0;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.weather-icon img {
+    width: 64px;
+    height: 64px;
 }
