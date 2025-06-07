@@ -2,10 +2,40 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel='stylesheet' href='/stylesheets/index.css' />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/javascripts/index.js"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+     <header class="header">
+       <div class="img">
+         <img src="" alt="" class="logo">
+       </div>
+       <div class="text">Weather Forecast</div>
+       <input type="text" placeholder="Введіть назву міста" class="city-name">
+       <button class="burger">☰
+       </button>
+     </header>
+     <div class="background">
+       <main>
+         <h1>Вітаємо в Weather Forecast!</h1>
+         <div class="btns">
+           <button>Увійти</button>
+           <button onclick="window.location.href('')">Зареєструватись</button>
+         </div>
+
+         <h3>Рекомендовані прогнози погоди: </h3>
+         <div class="recommended"></div>
+
+         <footer>
+           <h3>Досить гортати! Краще зареєструйся або увійди!</h3>
+           <p><a href="https://roman-talk.onrender.com" target="_blank">Інший проект</a> Романа, який робив цю сторінку</p>
+           <p>&copy; 2025. Команда Потужні</p>
+         </footer>
+
+       </main>
+     </div>
   </body>
 </html>
