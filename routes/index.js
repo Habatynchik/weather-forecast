@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { getWeatherByCity } = require("./services/getWeather");
+const { getWeatherByCity } = require("../services/getWeather");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -12,12 +12,12 @@ router.get('/get/:city', function(req, res, next) {
 })
 
 router.get("/get/recommended", async function (req, res, next) {
-  const cities = ["Kyiv", "Lviv", "Kharkiv"];
+  const city = "Kyiv";
   // потім треба додати логіку, якщо авторизований то брати список улюблених міст
 
   try {
-    const weatherData = await Promise.all(cities.map(city => getWeatherByCity(city)));
-
+    const weatherData = await getWeatherByCity(city)
+  console.log(weatherData);
     res.json(weatherData);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch weather data", details: err.message });
