@@ -1,4 +1,4 @@
-const API_KEY = '';
+const API_KEY = '66ec3e5050c8aba18dc0937a3fe8';
 
 function getWeatherIcon(condition) {
     condition = condition.toLowerCase();
