@@ -9,12 +9,16 @@ create table users
 	primary key(id)
 );
 
-create table query
+create table queries
 (
 	id serial,
 	userid integer not null,
-	query text not null,
-	foreign key (userid) references users(id)
+	date date,
+	city varchar(64),
+	temp float,
+	humidity float,
+	wind_speed float,
 
+	foreign key(userid) references users(id),
 	primary key(id)
 );
