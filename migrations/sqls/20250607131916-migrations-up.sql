@@ -14,7 +14,7 @@ create table query
 	id serial,
 	userid integer not null,
 	query text not null,
-	foreign key (userid) references users(id)
+	foreign key (userid) references users(id),
 
 	primary key(id)
 );
