@@ -23,8 +23,14 @@ router.get("/get/recommended", async function (req, res, next) {
   }
 });
 
-router.get('/get/:city', function(req, res, next) {
-  res.json(getWeatherByCity(req.params.city));
-})
+router.get('/get/:city', async function(req, res, next) {
+  try {
+    const data = await getWeatherByCity(req.params.city);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 module.exports = router;
