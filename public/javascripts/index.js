@@ -32,7 +32,7 @@ $(document).ready(function () {
                 `);
             },
             error: function(err) {
-                $(".weather").html(`<p>Помилка при завантаженні погоди</p>`);
+                $(".weather").html(`<p>Місто не знайдено</p>`);
                 console.error(err);
             }
         });
