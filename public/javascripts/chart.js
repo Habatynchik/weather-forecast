@@ -1,10 +1,10 @@
 function getWeatherIcon(condition) {
     condition = condition.toLowerCase();
-    if (condition.includes('rain')) return '/icons/icons8-rain.gif';
-    if (condition.includes('cloud')) return '/icons/icons8-partly-cloudy-day.gif';
-    if (condition.includes('clear')) return '/icons/icons8-cloud.gif';
-    if (condition.includes('snow')) return '/icons/icons8-light-snow.gif';
-    return '/icons/default.png';
+    if (condition.includes('rain')) return 'icons/icons8-rain.gif';
+    if (condition.includes('cloud')) return 'icons/icons8-partly-cloudy-day.gif';
+    if (condition.includes('clear')) return 'icons/icons8-cloud.gif';
+    if (condition.includes('snow')) return 'icons/icons8-light-snow.gif';
+    return './icons/default.gif';
 }
 
 async function fetchWeather(city) {
@@ -73,8 +73,8 @@ async function renderForecast(city) {
     });
 }
 
-document.getElementById('city').addEventListener('change', (e) => {
-    renderForecast(e.target.value);
+document.getElementById('city').addEventListener('change', async (e) => {
+    await renderForecast(e.target.value);
 });
 
 /*const input = document.getElementById('cityInput');
@@ -100,19 +100,5 @@ input.addEventListener('input', async () => {
         suggestions.appendChild(li);
     });
 });*/
-
-document.getElementById('getForecast').addEventListener('click', async () => {
-    const city = selectedCity || input.value.trim();
-    if (!city) return alert('Введіть місто');
-
-    const res = await fetch(`/api/forecast/${city}`);
-    const data = await res.json();
-
-    // тут вже фронтенд обробляє те, що надійшло з бекенду
-    document.getElementById('weatherResult').classList.remove('hidden');
-    document.getElementById('cityName').textContent = data.city.name;
-    document.getElementById('temperature').textContent = `Температура: ${data.list[0].main.temp}°C`;
-    document.getElementById('weatherDescription').textContent = `Опис: ${data.list[0].weather[0].description}`;
-});
 
 window.onload = () => renderForecast('Kyiv');
