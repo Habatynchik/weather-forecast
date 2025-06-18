@@ -1,49 +1,38 @@
-import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
-
 dotenv.config();
 
-const app = express();
-const PORT = 3000;
-const API_KEY = process.env.OPENWEATHER_API_KEY;
+const WEATHER_API_KEY = process.env.FORECAST_API_KEY;
+const BASE_URL = 'https://api.openweathermap.org/data/2.5';
 
-app.get('/weather', async (req, res) => {
-    const city = req.query.city;
-    if (!city) {
-        return res.status(400).json({ error: 'Потрібно вказати параметр city' });
-    }
+function normalizeCity(city) {
+    return city === 'Kiev' ? 'Kyiv' : city;
+}
 
-    try {
-        const response = await axios.get(
-            `https://api.openweathermap.org/data/2.5/weather`,
-            {
-                params: {
-                    q: city,
-                    appid: API_KEY,
-                    units: 'metric',
-                    lang: 'ua'
-                }
-            }
-        );
-
-        const weather = response.data;
-        res.json({
-            city: weather.name,
-            temperature: weather.main.temp,
-            description: weather.weather[0].description,
-            humidity: weather.main.humidity,
-            wind_speed: weather.wind.speed
+export const weatherService = {
+    async getWeather(city) {
+        const normalizedCity = normalizeCity(city);
+        const response = await axios.get(`${BASE_URL}/weather`, {
+            params: {
+                q: normalizedCity,
+                appid: WEATHER_API_KEY,
+                units: 'metric',
+                lang: 'ua',
+            },
         });
-    } catch (error) {
-        if (error.response && error.response.status === 404) {
-            res.status(404).json({ error: 'Місто не знайдено' });
-        } else {
-            res.status(500).json({ error: 'Помилка при отриманні даних з OpenWeather' });
-        }
-    }
-});
+        return response.data;
+    },
 
-app.listen(PORT, () => {
-    console.log(`Сервер запущено на http://localhost:${PORT}`);
-});
+    async getForecast(city) {
+        const normalizedCity = normalizeCity(city);
+        const response = await axios.get(`${BASE_URL}/forecast`, {
+            params: {
+                q: normalizedCity,
+                appid: WEATHER_API_KEY,
+                units: 'metric',
+                lang: 'ua',
+            },
+        });
+        return response.data;
+    },
+};

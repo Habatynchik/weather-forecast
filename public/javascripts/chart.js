@@ -1,5 +1,3 @@
-const API_KEY = '';
-
 function getWeatherIcon(condition) {
     condition = condition.toLowerCase();
     if (condition.includes('rain')) return '/icons/icons8-rain.gif';
@@ -77,5 +75,41 @@ async function renderForecast(city) {
 document.getElementById('city').addEventListener('change', (e) => {
     renderForecast(e.target.value);
 });
+const input = document.getElementById('cityInput');
+const suggestions = document.getElementById('suggestions');
+let selectedCity = '';
 
+input.addEventListener('input', async () => {
+    const query = input.value.trim();
+    if (!query) return (suggestions.innerHTML = '');
+
+    const res = await fetch(`/api/cities?q=${query}`);
+    const cities = await res.json();
+
+    suggestions.innerHTML = '';
+    cities.forEach(city => {
+        const li = document.createElement('li');
+        li.textContent = `${city.name}, ${city.country}`;
+        li.addEventListener('click', () => {
+            input.value = city.name;
+            selectedCity = city.name;
+            suggestions.innerHTML = '';
+        });
+        suggestions.appendChild(li);
+    });
+});
+
+document.getElementById('getForecast').addEventListener('click', async () => {
+    const city = selectedCity || input.value.trim();
+    if (!city) return alert('Введіть місто');
+
+    const res = await fetch(`/api/forecast/${city}`);
+    const data = await res.json();
+
+    // тут вже фронтенд обробляє те, що надійшло з бекенду
+    document.getElementById('weatherResult').classList.remove('hidden');
+    document.getElementById('cityName').textContent = data.city.name;
+    document.getElementById('temperature').textContent = `Температура: ${data.list[0].main.temp}°C`;
+    document.getElementById('weatherDescription').textContent = `Опис: ${data.list[0].weather[0].description}`;
+});
 window.onload = () => renderForecast('Kyiv');

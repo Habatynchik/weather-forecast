@@ -45,6 +45,39 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+import express from "express";
+import dotenv   from "dotenv";
+import cors     from "cors";
 
+import weatherRouter from "./routes/weather.router.js";
 
+dotenv.config();
+
+const app  = express();
+app.use(cors());
+app.use(express.json());
+
+app.use("/weather", weatherRouter);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`  API listening on http://localhost:${PORT}`));
+import express from 'express';
+import forecastRouter from './routes/forecast.router.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+
+app.use('/api', forecastRouter);
+
+app.listen(PORT, () => {
+  console.log(`Сервер запущено на http://localhost:${PORT}`);
+});
+
+import cityRouter from './routes/city.router.js';
+app.use('/api', cityRouter);
 module.exports = app;
