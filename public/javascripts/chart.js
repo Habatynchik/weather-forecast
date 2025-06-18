@@ -8,8 +8,9 @@ function getWeatherIcon(condition) {
 }
 
 async function fetchWeather(city) {
-    const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`);
+    const res = await fetch(`/weather/forecast/${city}`);
     const data = await res.json();
+    console.log(data);
     return data.list;
 }
 
@@ -75,7 +76,8 @@ async function renderForecast(city) {
 document.getElementById('city').addEventListener('change', (e) => {
     renderForecast(e.target.value);
 });
-const input = document.getElementById('cityInput');
+
+/*const input = document.getElementById('cityInput');
 const suggestions = document.getElementById('suggestions');
 let selectedCity = '';
 
@@ -83,7 +85,7 @@ input.addEventListener('input', async () => {
     const query = input.value.trim();
     if (!query) return (suggestions.innerHTML = '');
 
-    const res = await fetch(`/api/cities?q=${query}`);
+    const res = await fetch(`/cities?q=${query}`);
     const cities = await res.json();
 
     suggestions.innerHTML = '';
@@ -97,7 +99,7 @@ input.addEventListener('input', async () => {
         });
         suggestions.appendChild(li);
     });
-});
+});*/
 
 document.getElementById('getForecast').addEventListener('click', async () => {
     const city = selectedCity || input.value.trim();
@@ -112,4 +114,5 @@ document.getElementById('getForecast').addEventListener('click', async () => {
     document.getElementById('temperature').textContent = `Температура: ${data.list[0].main.temp}°C`;
     document.getElementById('weatherDescription').textContent = `Опис: ${data.list[0].weather[0].description}`;
 });
+
 window.onload = () => renderForecast('Kyiv');
