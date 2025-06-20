@@ -26,7 +26,7 @@ function groupByDay(list) {
             condition: item.weather[0].description
         });
     });
-    return Object.entries(days).slice(0, 4);
+    return Object.entries(days).slice(0, 6);
 }
 
 function createChart(ctx, labels, data) {
