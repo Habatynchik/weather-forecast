@@ -77,28 +77,32 @@ document.getElementById('city').addEventListener('change', async (e) => {
     await renderForecast(e.target.value);
 });
 
-/*const input = document.getElementById('cityInput');
+const input = document.getElementById('cityInput');
 const suggestions = document.getElementById('suggestions');
 let selectedCity = '';
 
 input.addEventListener('input', async () => {
     const query = input.value.trim();
-    if (!query) return (suggestions.innerHTML = '');
+    if (!query) {
+        return (suggestions.innerHTML = '');
+    }
 
-    const res = await fetch(`/cities?q=${query}`);
+    const res = await fetch(`/cities/cities?q=${query}`);
     const cities = await res.json();
 
     suggestions.innerHTML = '';
     cities.forEach(city => {
         const li = document.createElement('li');
         li.textContent = `${city.name}, ${city.country}`;
-        li.addEventListener('click', () => {
-            input.value = city.name;
-            selectedCity = city.name;
-            suggestions.innerHTML = '';
-        });
         suggestions.appendChild(li);
     });
-});*/
+});
+
+$(document).on("click", "li", function () {
+    let city = $(this).html();
+    if (city) {
+        renderForecast(city)
+    }
+});
 
 window.onload = () => renderForecast('Kyiv');
