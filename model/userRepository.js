@@ -1,7 +1,5 @@
 const runQuery = require('../configurations/db')
 const userQueries = require('./queries/userQueries')
-const favoriteCityQueries = require('./queries/favoriteCityQueries')
-const historyQueries = require('./queries/historyQueries')
 
 const userRepository = {
     getAllUsers: () => {},
