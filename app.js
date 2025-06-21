@@ -7,6 +7,7 @@ var dotenv = require('dotenv');
 dotenv.config();
 
 var indexRouter = require('./routes/index');
+var authRouter = require('./routes/auth');
 var usersRouter = require('./routes/users');
 
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use("/auth", authRouter);
 app.use('/users', usersRouter);
 
 
