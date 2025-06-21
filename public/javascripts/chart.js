@@ -1,17 +1,16 @@
-const API_KEY = '';
-
 function getWeatherIcon(condition) {
     condition = condition.toLowerCase();
-    if (condition.includes('rain')) return '/icons/icons8-rain.gif';
-    if (condition.includes('cloud')) return '/icons/icons8-partly-cloudy-day.gif';
-    if (condition.includes('clear')) return '/icons/icons8-cloud.gif';
-    if (condition.includes('snow')) return '/icons/icons8-light-snow.gif';
-    return '/icons/default.png';
+    if (condition.includes('rain')) return 'icons/icons8-rain.gif';
+    if (condition.includes('cloud')) return 'icons/icons8-partly-cloudy-day.gif';
+    if (condition.includes('clear')) return 'icons/icons8-cloud.gif';
+    if (condition.includes('snow')) return 'icons/icons8-light-snow.gif';
+    return './icons/default.gif';
 }
 
 async function fetchWeather(city) {
-    const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`);
+    const res = await fetch(`/weather/forecast/${city}`);
     const data = await res.json();
+    console.log(data);
     return data.list;
 }
 
@@ -27,7 +26,7 @@ function groupByDay(list) {
             condition: item.weather[0].description
         });
     });
-    return Object.entries(days).slice(0, 4);
+    return Object.entries(days).slice(0, 6);
 }
 
 function createChart(ctx, labels, data) {
@@ -74,8 +73,36 @@ async function renderForecast(city) {
     });
 }
 
-document.getElementById('city').addEventListener('change', (e) => {
-    renderForecast(e.target.value);
+document.getElementById('city').addEventListener('change', async (e) => {
+    await renderForecast(e.target.value);
+});
+
+const input = document.getElementById('cityInput');
+const suggestions = document.getElementById('suggestions');
+let selectedCity = '';
+
+input.addEventListener('input', async () => {
+    const query = input.value.trim();
+    if (!query) {
+        return (suggestions.innerHTML = '');
+    }
+
+    const res = await fetch(`/cities/cities?q=${query}`);
+    const cities = await res.json();
+
+    suggestions.innerHTML = '';
+    cities.forEach(city => {
+        const li = document.createElement('li');
+        li.textContent = `${city.name}, ${city.country}`;
+        suggestions.appendChild(li);
+    });
+});
+
+$(document).on("click", "li", function () {
+    let city = $(this).html();
+    if (city) {
+        renderForecast(city)
+    }
 });
 
 window.onload = () => renderForecast('Kyiv');
