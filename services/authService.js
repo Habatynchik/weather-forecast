@@ -22,8 +22,18 @@ const authService = {
             throw new Error("Username or password is invalid.");
         }
     },
-    logout: async () => {
-    }
+    logout: async (userId) => {
+        try {
+            const deleted = await User.destroy({ where: { id: userId } });
+            if (deleted === 0) {
+                throw new Error('User not found');
+            }
+            return { message: 'User account deleted' };
+        } catch (error) {
+            console.error('Logout (delete user) error:', error);
+            throw error;
+        }
+    },
 };
 
 module.exports = authService;
