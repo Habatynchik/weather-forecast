@@ -31,8 +31,9 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #007acc;
-    padding: 10px 20px;
+    background: #3e92b3;
+    background: linear-gradient(90deg,rgba(62, 146, 179, 1) 50%, rgba(87, 199, 133, 1) 100%, rgba(83, 237, 222, 1) 0%);
+    padding: 25px 25px;
     color: white;
     position: sticky;
     top: 0;
