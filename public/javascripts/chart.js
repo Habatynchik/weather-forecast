@@ -4,7 +4,7 @@ function getWeatherIcon(condition) {
     if (condition.includes('cloud')) return 'icons/icons8-partly-cloudy-day.gif';
     if (condition.includes('clear')) return 'icons/icons8-cloud.gif';
     if (condition.includes('snow')) return 'icons/icons8-light-snow.gif';
-    return './icons/default.gif';
+    return 'icons/icons8-partly-cloudy-day.gif';
 }
 
 async function fetchWeather(city) {
