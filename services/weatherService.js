@@ -21,7 +21,7 @@ const weatherService = {
         const response = await axios.get(`${BASE_URL}/forecast`, {
             params: {
                 q: city,
-                appid: WEATHER_API_KEY,
+                appid: FORECAST_API_KEY,
                 units: 'metric',
                 lang: 'ua',
             },
