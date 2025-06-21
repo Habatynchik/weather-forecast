@@ -9,6 +9,7 @@
     "axios": "^1.10.0",
     "cookie-parser": "~1.4.4",
     "db-migrate": "^0.11.14",
+    "db-migrate-pg": "^1.5.2",
     "debug": "~2.6.9",
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
