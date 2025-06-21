@@ -28,7 +28,7 @@ $(document).ready(function () {
     
 
     $(".city-name").on("keypress", function (e) {
-        if (e.which === 13) { // Коли натиснута клавіша Enter
+        if (e.which === 13) {
             const city = $(this).val().trim(); 
             if (!city) return;
     
@@ -37,7 +37,7 @@ $(document).ready(function () {
                 url: `/get/${city}`,
                 dataType: "json", 
                 success: function (res) {
-                    $(".weather").empty(); // Очищуємо блок перед новими даними
+                    $(".weather").empty(); 
                     $(".weather").html(`
                         <h2>${res.city}</h2>
                         <p>${res.temp} °C, ${res.description}</p>
