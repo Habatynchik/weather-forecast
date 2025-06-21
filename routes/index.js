@@ -7,7 +7,9 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-
+router.get('/account', function(req,res, next){
+  res.render("account")
+})
 
 router.get("/get/recommended", async function (req, res, next) {
   const cities = ["Лондон", "Київ", "Харків"];
