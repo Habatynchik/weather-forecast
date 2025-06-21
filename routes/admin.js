@@ -8,7 +8,7 @@ router.get('/users', async function(req, res, next) {
     const cities = await adminService.countCities()
     const users = await adminService.getAllUsers()
     console.log(queries)
-    res.render('admin');
+    res.render('admin', { queries: queries });
 });
 
 module.exports = router;
