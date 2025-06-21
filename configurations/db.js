@@ -8,6 +8,10 @@ const pool = new Pool({
     database: process.env.DATABASE_NAME,
     port: process.env.DATABASE_PORT,
     max: process.env.DATABASE_POOL_SIZE,
+    ssl: {
+        rejectUnauthorized: false,
+        ca: process.env.DATABASE_SSL
+    }
 });
 
 async function runQuery(query, params = []) {
