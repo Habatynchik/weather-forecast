@@ -20,9 +20,9 @@ const userRepository = {
             throw error;
         }
     },
-    createUser: async (username, password) => {
+    createUser: async (username, email,  password) => {
         try {
-            let data = await runQuery(userQueries.createUser, [username, password])
+            let data = await runQuery(userQueries.createUser, [username, email, password])
             return data.rows[0];
         } catch (error) {
             throw error;
