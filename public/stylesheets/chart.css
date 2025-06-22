@@ -19,7 +19,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f0f8ff;
+    background-color: white ;
+   /* background-color: #f0f8ff; */
     border-radius: 12px;
     padding: 10px;
 }
@@ -28,4 +29,24 @@ body {
     width: 60px;
     height: 60px;
     margin-bottom: 10px;
+}
+.dropdown {
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    background: white;
+    z-index: 1000;
+}
+
+.dropdown li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.dropdown li:hover {
+    background: #f0f0f0;
 }
