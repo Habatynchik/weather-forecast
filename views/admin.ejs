@@ -25,37 +25,94 @@
     <div class="accordion-item">
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                <% queries.forEach(function(e) { %>
-                    <tr class="table_row">
-                        <th class="table_item"> <%= e.userid %></th>
-                        <th class="table_item category"> <%= e.username %> </th>
-                        <th class="table_item">$ <%= e.query_count %> </th>
-                    </tr>
-                <% }); %>
+               <b>QUERY COUNT</b>
             </button>
         </h2>
         <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item’s accordion body.</div>
+            <div class="accordion-body">
+
+                <table class="history_table">
+                    <thead class="table_header">
+                    <tr>
+                        <th class="header_item" scope="col">User_id</th>
+                        <th class="header_item" scope="col">Username</th>
+                        <th class="header_item" scope="col">Query_count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% queries.forEach(function(e) { %>
+                        <tr class="table_row">
+                            <th class="table_item"> <%= e.userid %></th>
+                            <th class="table_item category"> <%= e.username %> </th>
+                            <th class="table_item"><%= e.query_count %> </th>
+                        </tr>
+                    <% }); %>
+                    </tbody>
+                </table>
+
+            </div>
         </div>
     </div>
     <div class="accordion-item">
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                Accordion Item #2
+                <b>MOST POPULAR CITIES</b>
             </button>
         </h2>
         <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item’s accordion body. Let’s imagine this being filled with some actual content.</div>
+            <div class="accordion-body">
+
+                <table class="history_table">
+                    <thead class="table_header">
+                    <tr>
+                        <th class="header_item" scope="col">City</th>
+                        <th class="header_item" scope="col">Query_count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% cities.forEach(function(e) { %>
+                        <tr class="table_row">
+                            <th class="table_item"> <%= e.city %></th>
+                            <th class="table_item"><%= e.query_count %> </th>
+                        </tr>
+                    <% }); %>
+                    </tbody>
+                </table>
+
+            </div>
         </div>
     </div>
     <div class="accordion-item">
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                Accordion Item #3
+                <b>USERS</b>
             </button>
         </h2>
         <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item’s accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+            <div class="accordion-body">
+
+                <table class="history_table">
+                    <thead class="table_header">
+                    <tr>
+                        <th class="header_item" scope="col">User_id</th>
+                        <th class="header_item" scope="col">Username</th>
+                        <th class="header_item" scope="col">Email</th>
+                        <th class="header_item" scope="col">Role</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% users.forEach(function(e) { %>
+                        <tr class="table_row">
+                            <th class="table_item"> <%= e.id %></th>
+                            <th class="table_item"><%= e.name %> </th>
+                            <th class="table_item"><%= e.email %> </th>
+                            <th class="table_item"><%= e.role %> </th>
+                        </tr>
+                    <% }); %>
+                    </tbody>
+                </table>
+
+            </div>
         </div>
     </div>
 </div>

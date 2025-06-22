@@ -88,3 +88,45 @@ body {
 header {
     flex-shrink: 0;
 }
+
+.history_table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px 0;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Заголовки таблиці */
+.table_header {
+    background-color: #007bff;
+    color: white;
+    text-align: left;
+}
+
+.header_item {
+    padding: 12px 15px;
+    font-weight: 600;
+}
+
+/* Рядки таблиці */
+.table_row:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table_row:hover {
+    background-color: #e2e6ea;
+    transition: background-color 0.3s ease;
+}
+
+/* Клітинки */
+.table_item {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Стовпець з категорією/іменем */
+.category {
+    font-weight: 500;
+    color: #333;
+}
