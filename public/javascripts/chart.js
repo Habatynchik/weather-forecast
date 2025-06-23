@@ -33,7 +33,7 @@ function createChart(ctx, labels, data) {
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: labels,
+            divs: divs,
             datasets: [{
                 label: 'Температура (°C)',
                 data: data,
@@ -92,13 +92,13 @@ input.addEventListener('input', async () => {
 
     suggestions.innerHTML = '';
     cities.forEach(city => {
-        const li = document.createElement('li');
-        li.textContent = `${city.name}, ${city.country}`;
+        const ul = document.createElement('ul');
+        ul.textContent = `${city.name}, ${city.country}`;
         suggestions.appendChild(li);
     });
 });
 
-$(document).on("click", "li", function () {
+$(document).on("click", "ul", function () {
     let city = $(this).html();
     if (city) {
         renderForecast(city)
