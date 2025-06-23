@@ -25,5 +25,6 @@ async function runQuery(query, params = []) {
         client.release();
     }
 }
-
+require('dotenv').config();
+console.log('Loaded ENV:', process.env.DATABASE_HOST);
 module.exports = runQuery;
