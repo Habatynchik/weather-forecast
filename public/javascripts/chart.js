@@ -6,7 +6,14 @@ function getWeatherIcon(condition) {
     if (condition.includes('snow')) return 'icons/icons8-light-snow.gif';
     return './icons/icons8-default.gif';
 }
-
+async function fetchCurrentWeather(city) {
+    const res = await fetch(`/weather/current/${city}`);
+    const data = await res.json();
+    return {
+        temp: data.main.temp,
+        condition: data.weather[0].description
+    };
+}
 async function fetchWeather(city) {
     const res = await fetch(`/weather/forecast/${city}`);
     const data = await res.json();
@@ -48,7 +55,22 @@ function createChart(ctx, labels, data) {
     });
 }
 
+async function renderCurrentWeather(city) {
+    const { temp, condition } = await fetchCurrentWeather(city);
+    const icon = getWeatherIcon(condition);
+
+    const container = document.getElementById('current-container');
+    container.innerHTML = `
+        <h2>Сьогодні (${new Date().toLocaleDateString()})</h2>
+        <img src="${icon}" alt="${condition}" class="weather-icon">
+        <canvas id="chart-current" width="100" height="50"></canvas>
+    `;
+
+    const ctx = document.getElementById('chart-current');
+    createChart(ctx, ['Поточна погода'], [temp]);
+}
 async function renderForecast(city) {
+    await renderCurrentWeather(city);
     const list = await fetchWeather(city);
     const grouped = groupByDay(list);
     const container = document.getElementById('forecast-container');
@@ -95,12 +117,25 @@ input.addEventListener('input', async () => {
         suggestions.appendChild(ul);
     });
 });
-
-$(document).on("click", "li", function () {
-    let city = $(this).html();
+function handleCitySearch(city) {
     if (city) {
-        renderForecast(city)
+        renderForecast(city.trim());
+        input.value = city.trim();
+        suggestions.innerHTML = '';
+    }
+}
+$(document).on("click", "#suggestions li", function () {
+    const city = $(this).text();
+    handleCitySearch(city);
+});
+$('#search_btn').on('click', () => {
+    const city = input.value;
+    handleCitySearch(city);
+});
+input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        const city = input.value;
+        handleCitySearch(city);
     }
 });
-
 window.onload = () => renderForecast('Kyiv');
