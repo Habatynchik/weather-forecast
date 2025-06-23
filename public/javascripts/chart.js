@@ -73,9 +73,7 @@ async function renderForecast(city) {
     });
 }
 
-document.getElementById('city').addEventListener('change', async (e) => {
-    await renderForecast(e.target.value);
-});
+
 
 const input = document.getElementById('cityInput');
 const suggestions = document.getElementById('suggestions');
@@ -92,13 +90,13 @@ input.addEventListener('input', async () => {
 
     suggestions.innerHTML = '';
     cities.forEach(city => {
-        const ul = document.createElement('ul');
+        const ul = document.createElement('li');
         ul.textContent = `${city.name}, ${city.country}`;
-        suggestions.appendChild(li);
+        suggestions.appendChild(ul);
     });
 });
 
-$(document).on("click", "ul", function () {
+$(document).on("click", "li", function () {
     let city = $(this).html();
     if (city) {
         renderForecast(city)
