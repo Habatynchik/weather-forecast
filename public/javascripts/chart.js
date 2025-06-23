@@ -33,7 +33,7 @@ function createChart(ctx, labels, data) {
     new Chart(ctx, {
         type: 'line',
         data: {
-            divs: divs,
+            labels: labels,
             datasets: [{
                 label: 'Температура (°C)',
                 data: data,
