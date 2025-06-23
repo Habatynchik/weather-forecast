@@ -6,6 +6,10 @@
     "host": {"ENV":  "DATABASE_HOST"},
     "database": {"ENV":  "DATABASE_NAME"},
     "port": {"ENV":  "DATABASE_PORT"},
+    "ssl": {
+      "rejectUnauthorized": false,
+      "ca": {"ENV":  "DATABASE_SSL"}
+    },
     "schema": "public"
   }
 }
