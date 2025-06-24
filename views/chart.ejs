@@ -5,22 +5,27 @@
     <title>Weather Forecast</title>
     <link rel="stylesheet" href="stylesheets/chart.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arial">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
     <script src="/javascripts/chart.js" defer></script>
+
 </head>
 <body>
 
 
 <main id="weatherSection">
-    <div id="chart">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="cityInput" placeholder="Enter city name">
+    <div class="top-bar">
+        <div class="input-wrapper">
+            <input type="text" id="cityInput" placeholder="Enter city name">
+            <img src="/icons/static/static-search.png" class="search-icon" alt="search">
+            <ul id="suggestions"></ul>
+        </div>
         <button id="search_btn">Search</button>
-        <ul id="suggestions"></ul>
     </div>
 </main>
-<div id="current-container" class="today-weather"></div>
+<div id="current-container"></div>
 <hr>
 <div id="forecast-container"></div>
 </body>

@@ -1,11 +1,20 @@
-function getWeatherIcon(condition) {
-    condition = condition.toLowerCase();
-    if (condition.includes('rain')) return 'icons/icons8-rain.gif';
-    if (condition.includes('cloud')) return 'icons/icons8-partly-cloudy-day.gif';
-    if (condition.includes('clear')) return 'icons/icons8-cloud.gif';
-    if (condition.includes('snow')) return 'icons/icons8-light-snow.gif';
-    return './icons/icons8-default.gif';
+function normalizeCondition(condition) {
+    const text = condition.toLowerCase();
+    if (text.includes('rain')) return 'rain';
+    if (text.includes('cloud')) return 'cloud';
+    if (text.includes('clear')) return 'clear';
+    if (text.includes('snow')) return 'snow';
+    return 'default';
 }
+
+function getWeatherIcon(condition) {
+    const name = normalizeCondition(condition);
+    return {
+        static: `/icons/static/${name}.png`,
+        animated: `/icons/animated/${name}.gif`
+    };
+}
+
 async function fetchCurrentWeather(city) {
     const res = await fetch(`/weather/current/${city}`);
     const data = await res.json();
@@ -14,12 +23,13 @@ async function fetchCurrentWeather(city) {
         condition: data.weather[0].description
     };
 }
+
 async function fetchWeather(city) {
     const res = await fetch(`/weather/forecast/${city}`);
     const data = await res.json();
-    console.log(data);
     return data.list;
 }
+
 
 function groupByDay(list) {
     const days = {};
@@ -60,16 +70,26 @@ async function renderCurrentWeather(city) {
     const icon = getWeatherIcon(condition);
 
     const container = document.getElementById('current-container');
+    container.style.display = 'flex';
     container.innerHTML = `
-        <h2>Сьогодні (${new Date().toLocaleDateString()})</h2>
-        <img src="${icon}" alt="${condition}" class="weather-icon">
-        <canvas id="chart-current" width="100" height="50"></canvas>
-    `;
+    <div class="today-weather">
+      <h2>Сьогодні (${new Date().toLocaleDateString()})</h2>
+      <img src="${icon.static}" data-hover="${icon.animated}" class="weather-icon-hover">
+      <canvas id="chart-current" width="100" height="50"></canvas>
+    </div>
+  `;
 
     const ctx = document.getElementById('chart-current');
     createChart(ctx, ['Поточна погода'], [temp]);
+
+    const currentImg = container.querySelector('.weather-icon-hover');
+    currentImg.addEventListener('mouseenter', () => currentImg.src = icon.animated);
+    currentImg.addEventListener('mouseleave', () => currentImg.src = icon.static);
 }
+
+// === RENDER FORECAST ===
 async function renderForecast(city) {
+    document.getElementById('forecast-container').style.display = 'flex';
     await renderCurrentWeather(city);
     const list = await fetchWeather(city);
     const grouped = groupByDay(list);
@@ -84,58 +104,71 @@ async function renderForecast(city) {
         const icon = getWeatherIcon(condition);
 
         div.innerHTML = `
-            <h3>${day}</h3>
-            <img src="${icon}" alt="${condition}" class="weather-icon">
-            <canvas id="chart-${i}" width="300" height="100"></canvas>
-        `;
+      <h3>${day}</h3>
+      <img src="${icon.static}" data-hover="${icon.animated}" class="weather-icon-hover">
+      <canvas id="chart-${i}" width="300" height="100"></canvas>
+    `;
 
         container.appendChild(div);
         const ctx = document.getElementById(`chart-${i}`);
         createChart(ctx, entries.map(e => e.time), entries.map(e => e.temp));
     });
+
+    document.querySelectorAll('.weather-icon-hover').forEach(img => {
+        const animated = img.dataset.hover;
+        const staticSrc = img.src;
+        img.addEventListener('mouseenter', () => img.src = animated);
+        img.addEventListener('mouseleave', () => img.src = staticSrc);
+    });
 }
 
-
-
+// === CITY SEARCH ===
 const input = document.getElementById('cityInput');
 const suggestions = document.getElementById('suggestions');
-let selectedCity = '';
 
 input.addEventListener('input', async () => {
     const query = input.value.trim();
     if (!query) {
-        return (suggestions.innerHTML = '');
+        suggestions.innerHTML = '';
+        suggestions.style.display = 'none';
+        return;
     }
 
     const res = await fetch(`/cities/cities?q=${query}`);
     const cities = await res.json();
 
     suggestions.innerHTML = '';
-    cities.forEach(city => {
-        const ul = document.createElement('li');
-        ul.textContent = `${city.name}, ${city.country}`;
-        suggestions.appendChild(ul);
-    });
-});
-function handleCitySearch(city) {
-    if (city) {
-        renderForecast(city.trim());
-        input.value = city.trim();
-        suggestions.innerHTML = '';
+    if (Array.isArray(cities)) {
+        cities.forEach(city => {
+            const li = document.createElement('li');
+            li.textContent = `${city.name}, ${city.country}`;
+            suggestions.appendChild(li);
+        });
+        suggestions.style.display = 'block';
     }
-}
+});
+
 $(document).on("click", "#suggestions li", function () {
     const city = $(this).text();
     handleCitySearch(city);
 });
+
 $('#search_btn').on('click', () => {
     const city = input.value;
     handleCitySearch(city);
 });
+
 input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         const city = input.value;
         handleCitySearch(city);
     }
 });
-window.onload = () => renderForecast('Kyiv');
+
+function handleCitySearch(city) {
+    if (city) {
+        renderForecast(city.trim());
+        input.value = city.trim();
+        suggestions.style.display = 'none';
+    }
+}
