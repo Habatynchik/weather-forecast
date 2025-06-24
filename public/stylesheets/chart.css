@@ -69,25 +69,25 @@ body {
 }
 #suggestions {
     position: absolute;
-    top: calc(100% + 5px);
+    top: 100%;
     left: 0;
     width: 100%;
+    margin-top: 5px;
+
     border: 1px solid #ccc;
     background-color: #f0f8ff;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     max-height: 200px;
-    overflow-y: auto;
     z-index: 1000;
-    display: none !important;
     color: black;
+    display: none;
 }
 
+/* Показувати, коли є клас show */
 #suggestions.show {
-    display: block !important;
+    display: block;
 }
-
-
 #suggestions li {
     padding: 10px;
     cursor: pointer;

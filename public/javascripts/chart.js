@@ -128,23 +128,39 @@ const suggestions = document.getElementById('suggestions');
 
 input.addEventListener('input', async () => {
     const query = input.value.trim();
-    if (!query) {
-        suggestions.innerHTML = '';
-        suggestions.style.display = 'none';
+
+    if (query.length < 2) {
+        suggestions.classList.remove('show');
         return;
     }
 
-    const res = await fetch(`/cities/cities?q=${query}`);
-    const cities = await res.json();
+    try {
+        const res = await fetch(`/cities?q=${encodeURIComponent(query)}`);
+        if (!res.ok) {
+            throw new Error(`HTTP error ${res.status}`);
+        }
 
-    suggestions.innerHTML = '';
-    if (Array.isArray(cities)) {
-        cities.forEach(city => {
-            const li = document.createElement('li');
-            li.textContent = `${city.name}, ${city.country}`;
-            suggestions.appendChild(li);
-        });
-        suggestions.style.display = 'block';
+        const cities = await res.json();
+        console.log(cities); // для дебагу
+
+        suggestions.innerHTML = '';
+
+        if (Array.isArray(cities) && cities.length > 0) {
+            cities.forEach(city => {
+                const li = document.createElement('li');
+                li.textContent = `${city.name}, ${city.country}`;
+                li.addEventListener('click', () => {
+                    input.value = city.name;
+                    suggestions.classList.remove('show');
+                });
+                suggestions.appendChild(li);
+            });
+            suggestions.classList.add('show');
+        } else {
+            suggestions.classList.remove('show');
+        }
+    } catch (error) {
+        console.error('Error fetching cities:', error);
     }
 });
 
