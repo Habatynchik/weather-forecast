@@ -1,4 +1,4 @@
-create table users
+create table IF NOT EXISTS users
 (
 	id serial,
 	name varchar(64),
@@ -9,7 +9,7 @@ create table users
 	primary key(id)
 );
 
-create table queries
+create table IF NOT EXISTS queries
 (
 	id serial,
 	userid integer not null,

@@ -1,9 +1,12 @@
 let createError = require('http-errors');
 let express = require('express');
+let session = require('cookie-session');
 let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 
+
+let adminRouter = require('./routes/admin');
 let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/users');
 let chartRouter = require('./routes/chart');
@@ -25,6 +28,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+app.use(session({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false,
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24,
+  }
+}))
+
+
 app.use('/', indexRouter);
 app.use('/chart', chartRouter);
 app.use('/users', usersRouter);
@@ -32,6 +47,7 @@ app.use('/auth', authRouter);
 app.use('/main', mainRouter);
 app.use('/weather', weatherRouter);
 app.use('/cities', citiesRouter);
+app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

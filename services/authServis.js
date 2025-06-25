@@ -2,13 +2,13 @@ const userRepository = require('../model/userRepository');
 const bcrypt = require('bcrypt');
 
 const authService = {
-    register: async (username, password) => {
+    register: async (username, email,  password) => {
         password = bcrypt.hashSync(password, 10);
         let user = await userRepository.getUserByUsername(username);
         if (user) {
             throw new Error("Username already exist ");
         }
-        return await userRepository.createUser(username, password);
+        return await userRepository.createUser(username, email,  password);
     },
     authenticate: async (username, password) => {
         let user = await userRepository.getUserByUsername(username);
