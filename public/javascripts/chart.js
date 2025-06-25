@@ -75,12 +75,11 @@ async function renderCurrentWeather(city) {
     <div class="today-weather">
       <h2>Сьогодні (${new Date().toLocaleDateString()})</h2>
       <img src="${icon.static}" data-hover="${icon.animated}" class="weather-icon-hover">
-      <canvas id="chart-current" width="100" height="50"></canvas>
+      <h1 id="current" width="100" height="50"></h1>
     </div>
   `;
+    document.getElementById('current').innerHTML=`${temp}°C`;
 
-    const ctx = document.getElementById('chart-current');
-    createChart(ctx, ['Поточна погода'], [temp]);
 
     const currentImg = container.querySelector('.weather-icon-hover');
     currentImg.addEventListener('mouseenter', () => currentImg.src = icon.animated);
