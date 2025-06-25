@@ -135,7 +135,7 @@ input.addEventListener('input', async () => {
     }
 
     try {
-        const res = await fetch(`/cities?q=${encodeURIComponent(query)}`);
+        const res = await fetch(`/cities?q=${query}`);
         if (!res.ok) {
             throw new Error(`HTTP error ${res.status}`);
         }
