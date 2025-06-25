@@ -22,3 +22,20 @@ create table IF NOT EXISTS queries
 	foreign key(userid) references users(id),
 	primary key(id)
 );
+
+
+create table IF NOT EXISTS favorite
+(
+    id serial,
+    userid integer not null,
+    city varchar(64) not null,
+
+
+    primary key(id),
+    foreign key(userid) references users(id)
+    );
+
+INSERT INTO favorite (userid, city)
+VALUES
+    (15, 'Kyiv'),
+    (15, 'Lviv');

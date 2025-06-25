@@ -5,6 +5,7 @@ const userQueries = {
     createUser: "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *",
     DELETE_USER: "",
     UPDATE_USER: "",
+    FAVORITE_CITY: "SELECT city FROM favorite WHERE userid = $1",
 };
 
 module.exports = userQueries;
