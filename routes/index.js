@@ -10,7 +10,7 @@ router.get('/', async function(req, res, next) {
 
         // Якщо немає користувача або його ID
         if (!sessionUser || !sessionUser.id) {
-            return res.render('index');
+            return res.render('index', { weatherResults: [] });
         }
 
         // Отримуємо список улюблених міст користувача
@@ -18,7 +18,7 @@ router.get('/', async function(req, res, next) {
 
         // Якщо немає жодного міста — просто рендеримо сторінку
         if (!favoriteCities || favoriteCities.length === 0) {
-            return res.render('index');
+            return res.render('index', { weatherResults: [] });
         }
 
         // Запити погоди для кожного міста
@@ -33,12 +33,29 @@ router.get('/', async function(req, res, next) {
             console.log(`🌦️ Погода в ${favoriteCities[i].city}:`, weather);
         });
 
-        // Якщо хочеш передати ці дані на сторінку:
         res.render('index', { weatherResults });
 
     } catch (error) {
-        console.error('❌ Помилка при обробці запиту /:', error);
-        res.render('index'); // fallback
+        console.error('Помилка при обробці запиту /:', error);
+        return res.render('index', { weatherResults: [] });
+    }
+});
+
+router.post('/delete', async function(req, res, next) {
+    try {
+        const user = req.session.user;
+        const city = req.body.city;
+
+        if (!user || !user.id || !city) {
+            console.error("Помилка: user або city не вказані.");
+            return res.redirect('/');
+        }
+
+        await userRepository.deleteCity(user.id, city);
+        res.redirect('/');
+    } catch (error) {
+        console.error('Помилка при обробці запиту /delete:', error);
+        res.status(500).render('index', { error: 'Не вдалося видалити місто.' });
     }
 });
 

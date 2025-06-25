@@ -36,6 +36,14 @@ const userRepository = {
             throw error;
         }
     },
+    deleteCity:  async (user_id, city) => {
+        try {
+            let data = await runQuery(userQueries.DELETE_CITY, [user_id, city])
+            return data.rows;
+        } catch (error) {
+            throw new Error("ERROR DELETE CITY");
+        }
+    },
 }
 
 module.exports = userRepository;

@@ -103,12 +103,18 @@ header {
 .burger-menu{
     display: none;
     z-index: 10;
-    background-color: #ffffff;
+    background-color: #303030;
     height: 100%;
     width: 20vw;
+    overflow-y:  auto;
+}
+
+.burger-menu::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
 }
 
 .form{
+    color: white;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -120,11 +126,76 @@ header {
 }
 
 .form:hover{
-    background-color: #e6e6e6;
+    background-color: #3c3c3c;
     transition: all 0.5s;
 }
 
 .form p{
     margin-bottom: 0;
     margin-left: 10px;
+}
+
+.item{
+    background-color: #ffffff;
+    color: black;
+    display: flex;
+    flex-direction: row;
+    margin: 15px;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.part1{
+    display: flex;
+    flex-direction:  column;
+    align-items: center;
+    width: 30%;
+}
+
+.part1 p{
+    padding: 0;
+    font-weight: bold;
+    font-size: 19px;
+}
+
+.part2{
+    display: flex;
+    flex-direction:  column;
+    width: 70%;
+}
+
+.top2{
+    display: flex;
+    flex-direction:  row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    width: 100%;
+    height: 50%;
+}
+
+.top2 p{
+    padding: 0;
+    margin: 0;
+    font-size: 17px;
+}
+
+.bottom2{
+    display: flex;
+    flex-direction:  column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    width: 100%;
+    height: 50%;
+}
+
+.bottom2 p{
+    padding: 0;
+    margin: 0;
+}
+
+.star{
+    background-color: rgba(85, 85, 85, 0);
+    border: none;
 }
