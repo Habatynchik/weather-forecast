@@ -75,7 +75,7 @@
                     <div class="part1">
                         <p><%= e.name %></p>
                         <input type="hidden" name="city" value="<%= e.name %>">
-                        <img src="/icons/animated/cloud.gif" alt="">
+                        <img style="width: 55px; height: 55px;" src="https://openweathermap.org/img/wn/<%=e.weather[0].icon%>@2x.png" alt="<%= e.weather[0].description %>">
                     </div>
                     <div class="part2">
                         <div class="top2">
