@@ -4,27 +4,29 @@
     <meta charset="UTF-8">
     <title>Weather Forecast</title>
     <link rel="stylesheet" href="stylesheets/chart.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arial">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
     <script src="/javascripts/chart.js" defer></script>
+
 </head>
 <body>
 
-<div>
-    <input type="text" id="cityInput">
-    <ul id="suggestions">
 
-    </ul>
-    <label for="city">Choose city:</label>
-    <select id="city">
-        <option value="Kyiv">Kyiv</option>
-        <option value="Odesa">Odesa</option>
-        <option value="Lviv">Lviv</option>
-        <option value="Kharkiv">Kharkiv</option>
-    </select>
-</div>
-
+<main id="weatherSection">
+    <div class="top-bar">
+        <div class="input-wrapper">
+            <input type="text" id="cityInput" placeholder="Enter city name">
+            <img src="/icons/static/static-search.png" class="search-icon" alt="search">
+            <ul id="suggestions"></ul>
+        </div>
+        <button id="search_btn">Search</button>
+    </div>
+</main>
+<div id="current-container"></div>
+<hr>
 <div id="forecast-container"></div>
-
 </body>
 </html>

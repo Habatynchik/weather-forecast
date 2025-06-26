@@ -11,7 +11,6 @@ const weatherService = {
                 q: city,
                 appid: WEATHER_API_KEY,
                 units: 'metric',
-                lang: 'ua',
             },
         });
         return response.data;
@@ -23,7 +22,6 @@ const weatherService = {
                 q: city,
                 appid: WEATHER_API_KEY,
                 units: 'metric',
-                lang: 'ua',
             },
         });
         return response.data;

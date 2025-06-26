@@ -23,5 +23,14 @@ router.get("/forecast/:city", async (req, res) => {
         res.status(err.status || 500).json({ error: err.message });
     }
 });
+router.get("/current/:city", async (req, res) => {
+    try {
+        let city = req.params.city;
+        const data = await weatherService.getWeather(city);
+        res.json(data);
+    } catch (err) {
+        res.status(err.status || 500).json({ error: err.message });
+    }
+});
 
 module.exports = router;
