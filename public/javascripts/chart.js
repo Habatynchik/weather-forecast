@@ -169,6 +169,11 @@ $(document).on("click", "#suggestions li", function () {
     handleCitySearch(city);
 });
 
+
+$('.search-icon').on('click', () => {
+    const city = input.value;
+    handleCitySearch(city);
+});
 $('#search_btn').on('click', () => {
     const city = input.value;
     handleCitySearch(city);
