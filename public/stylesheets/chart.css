@@ -39,7 +39,7 @@ body {
 
 .search-icon {
     position: absolute;
-    right: 10px;
+    right: -45px;
     top: 50%;
     transform: translateY(-50%);
     width: 24px;
@@ -71,12 +71,11 @@ body {
     position: absolute;
     top: 100%;
     left: 0;
-    width: 100%;
+    width: 105%;
     margin-top: 5px;
-
     border: 1px solid #ccc;
     background-color: #f0f8ff;
-    border-radius: 12px;
+    border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     max-height: 200px;
     z-index: 1000;
@@ -89,13 +88,14 @@ body {
     display: block;
 }
 #suggestions li {
+    border-radius: 15px;
     padding: 10px;
     cursor: pointer;
     font-size: 16px;
 }
 
 #suggestions li:hover {
-    background-color: #e0f0ff;
+    background-color: #f0f8ff;
 }
 
 #current-container,
@@ -115,7 +115,7 @@ body {
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: #f0f8ff;
+        background-color: #FFFFFF;
         backdrop-filter: blur(10px);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         border-radius: 12px;
