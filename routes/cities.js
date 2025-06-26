@@ -3,7 +3,7 @@ let router = express.Router();
 let citiesService = require('../services/citiesService');
 
 
-router.get('/cities', async (req, res) => {
+router.get('/', async (req, res) => {
     const query = req.query.q;
     if (!query) return res.status(400).json({ error: 'Потрібен параметр q' });
     try {
