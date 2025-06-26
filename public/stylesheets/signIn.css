@@ -74,7 +74,7 @@
 }
 
 
-.icon_1 {
+.user_icon{
     position: relative;
     left: 150px;
     bottom:75px;
@@ -82,7 +82,7 @@
     height: 20px;
     pointer-events: none;
 }
-.icon_2 {
+.email_icon{
     position: relative;
     left: 150px;
     bottom:75px;
