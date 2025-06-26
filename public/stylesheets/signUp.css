@@ -16,15 +16,19 @@
 
 
 .container{
-    border-radius: 10px;
+    border-radius: 16px;
     padding: 20px;
     width: 410px;
-    height: 360px;
+    height: 460px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #222;
+    background: rgba(255, 255, 255, 0.1); /* напівпрозорий */
+    backdrop-filter: blur(12px); /* головне для розмиття */
+    -webkit-backdrop-filter: blur(12px); /* підтримка Safari */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 #text{
@@ -67,4 +71,16 @@
 
 #submit:hover{
     background-color: #d0e9ff;
-}
+}.input .user_icon {
+     position: absolute;
+     top: 50%;
+     right: 14px;
+     transform: translateY(-50%);
+     width: 20px;
+     height: 20px;
+     background-size: contain;
+     background-repeat: no-repeat;
+     background-position: center;
+     opacity: 0.6;
+     pointer-events: none;
+ }
