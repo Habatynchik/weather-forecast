@@ -28,6 +28,22 @@ const userRepository = {
             throw error;
         }
     },
+    getAllFavoritesCities: async (user_id) => {
+        try {
+            let data = await runQuery(userQueries.FAVORITE_CITY, [user_id])
+            return data.rows;
+        } catch (error) {
+            throw error;
+        }
+    },
+    deleteCity:  async (user_id, city) => {
+        try {
+            let data = await runQuery(userQueries.DELETE_CITY, [user_id, city])
+            return data.rows;
+        } catch (error) {
+            throw new Error("ERROR DELETE CITY");
+        }
+    },
 }
 
 module.exports = userRepository;
