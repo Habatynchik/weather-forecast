@@ -37,15 +37,6 @@ async function saveWeatherQuery({ city, temp, condition, humidity, wind, timesta
         }
     });
 }
-await saveForecastQuery({
-    city: data.city.name,
-    timestamp: new Date(),
-    forecast: data.list.map(item => ({
-        time: item.dt_txt,
-        temp: item.main.temp,
-        condition: item.weather[0].description
-    }))
-});
 require('dotenv').config();
 console.log('Loaded ENV:', process.env.DATABASE_HOST);
 module.exports = runQuery;
