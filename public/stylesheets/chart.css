@@ -39,7 +39,7 @@ body {
 
 .search-icon {
     position: absolute;
-    right: -45px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
     width: 24px;
@@ -49,6 +49,7 @@ body {
 .search-icon:hover {
     content: url('/icons/animated/animated-search.gif');
 }
+
 
 #search_btn {
     margin-left: 60px;
