@@ -26,11 +26,14 @@ router.get("/forecast/:city", async (req, res) => {
     res.json(data);
 });
 router.get("/current/:city", async (req, res) => {
+    const user = req.session.user;
+    const isAuthenticated = !!user;
+    const data = await weatherService.getWeather(city);
     try {
+
         const id = req.session.id;
         let city = req.params.city;
         const username = req.session.username;
-        const data = await weatherService.getWeather(city);
     } catch (err) {
         res.status(err.status || 500).json({error: err.message});
     }
@@ -40,6 +43,7 @@ router.get("/current/:city", async (req, res) => {
         const humidity = data.main.humidity;
         const wind_speed = data.wind.speed;
     }
+    if (isAuthenticated) {
         await saveWeatherQuery({
             userid: req.session.user.id,
             city: data.name,
@@ -50,7 +54,6 @@ router.get("/current/:city", async (req, res) => {
         });
         res.json(data);
     }
-)
-    ;
+});
 
-    module.exports = router;
+module.exports = router;
