@@ -1,13 +1,15 @@
 let express = require('express');
 let router = express.Router();
 let weatherService = require('../services/weatherService');
+const userRepository = require('../model/userRepository');
 
 // GET /weather/:city – поточна погода
 router.get("/:city", async (req, res) => {
     try {
         let city = req.params.city;
         let data = await weatherService.getWeather(city);
-        res.json(data);            // «як є», без обробки
+        console.log(data)
+        res.json(data);// «як є», без обробки
     } catch (err) {
         res.status(err.status || 500).json({ error: err.message });
     }
@@ -32,5 +34,6 @@ router.get("/current/:city", async (req, res) => {
         res.status(err.status || 500).json({ error: err.message });
     }
 });
+
 
 module.exports = router;
