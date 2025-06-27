@@ -39,12 +39,12 @@ router.get("/current/:city", async (req, res) => {
         const wind_speed = data.wind.speed;
 
         if (isAuthenticated) {
-            await saveWeatherQuery({
+            await userRepository.saveWeatherQuery({
                 userid: user.id,
                 city: data.name,
-                temp,
-                humidity,
-                wind_speed,
+                temp: temp,
+                humidity: humidity,
+                wind_speed:wind_speed,
                 date: new Date()
             });
         }

@@ -28,10 +28,7 @@ async function runQuery(query, params = []) {
 
 async function saveWeatherQuery({ userid, city, temp, humidity, wind_speed, date }) {
     try {
-        const query = `
-            INSERT INTO queries (userid, city, temp, humidity, wind_speed, date)
-            VALUES ($1, $2, $3, $4, $5, $6)
-        `;
+        const query = `INSERT INTO queries (userid, city, temp, humidity, wind_speed, date) VALUES ($1, $2, $3, $4, $5, $6)`;
         const values = [userid, city, temp, humidity, wind_speed, date];
 
         await pool.query(query, values);

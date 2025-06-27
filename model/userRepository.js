@@ -54,14 +54,15 @@ const userRepository = {
             throw new Error("ERROR ADD CITY");
         }
     },
+    saveWeatherQuery: async (city, temp, condition, humidity, wind, timestamp) => {
+        try {
+            let data = await runQuery(userQueries.SAVE_WEATHER_QUERY, [city, temp, condition, humidity, wind, timestamp])
+            return data.rows;
+        } catch (error) {
+            throw new Error("ERROR SAVE WEATHER QUERY");
+        }
+    },
 }
-saveWeatherQuery: async (city, temp, condition, humidity, wind, timestamp) => {
-    try {
-        let data = await runQuery(userQueries.SAVE_WEATHER_QUERY, [city, temp, condition, humidity, wind, timestamp])
-        return data.rows;
-    } catch (error) {
-        throw new Error("ERROR SAVE WEATHER QUERY");
-    }
-}
+
 
 module.exports = userRepository;
