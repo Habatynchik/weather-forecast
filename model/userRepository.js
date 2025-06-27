@@ -44,6 +44,14 @@ const userRepository = {
             throw new Error("ERROR DELETE CITY");
         }
     },
+    addFavorites: async (user_id, favorites) => {
+        try{
+            let data = await runQuery(userQueries.ADD_FAVORITE_CITY, [user_id, favorites])
+            return data.rows;
+        } catch (error) {
+            throw new Error("ERROR ADD CITY");
+        }
+    },
 }
 
 module.exports = userRepository;
