@@ -10,16 +10,17 @@ router.get('/', async function(req, res, next) {
         const sessionUser = req.session.user;
 
         if (!sessionUser || !sessionUser.id) {
+            console.log('!!!')
             return res.render('index', { weatherResults: [] ,username: 'username', firstLetter: 'U'  });
         }
 
         const favoriteCities = await userRepository.getAllFavoritesCities(sessionUser.id);
 
+        const firstLetter = req.session.user.username[0];
         if (!favoriteCities || favoriteCities.length === 0) {
-            return res.render('index', { weatherResults: [] , username: 'username', firstLetter: 'U'   });
+            return res.render('index', { weatherResults: [] ,  username: req.session.user.username, firstLetter: firstLetter   });
         }
 
-        const firstLetter = req.session.user.username[0];
 
         const weatherDataPromises = favoriteCities.map(entry =>
             weatherService.getWeather(entry.city)
