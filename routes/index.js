@@ -1,24 +1,28 @@
 const express = require('express');
 const router = express.Router();
 
-const userRepository =  require('../model/userRepository');
+const userRepository = require('../model/userRepository');
 const weatherService = require('../services/weatherService');
 const favoritService = require('../services/favoritService');
 
-router.get('/', async function(req, res, next) {
+router.get('/', async function (req, res, next) {
     try {
         const sessionUser = req.session.user;
 
         if (!sessionUser || !sessionUser.id) {
             console.log('!!!')
-            return res.render('index', { weatherResults: [] ,username: 'username', firstLetter: 'U'  });
+            return res.render('index', {weatherResults: [], username: 'username', firstLetter: 'U'});
         }
 
         const favoriteCities = await userRepository.getAllFavoritesCities(sessionUser.id);
 
         const firstLetter = req.session.user.username[0];
         if (!favoriteCities || favoriteCities.length === 0) {
-            return res.render('index', { weatherResults: [] ,  username: req.session.user.username, firstLetter: firstLetter   });
+            return res.render('index', {
+                weatherResults: [],
+                username: req.session.user.username,
+                firstLetter: firstLetter
+            });
         }
 
 
@@ -28,19 +32,23 @@ router.get('/', async function(req, res, next) {
 
         const weatherResults = await Promise.all(weatherDataPromises);
 
-       /* weatherResults.forEach((weather, i) => {
-            console.log(`Погода в ${favoriteCities[i].city}:`, weather);
-        }); */
+        /* weatherResults.forEach((weather, i) => {
+             console.log(`Погода в ${favoriteCities[i].city}:`, weather);
+         }); */
 
-        res.render('index', { weatherResults: weatherResults, username: req.session.user.username, firstLetter: firstLetter });
+        res.render('index', {
+            weatherResults: weatherResults,
+            username: req.session.user.username,
+            firstLetter: firstLetter
+        });
 
     } catch (error) {
         console.error('Помилка при обробці запиту /:', error);
-        return res.render('index', { weatherResults: [] , username: 'username', firstLetter: 'U' });
+        return res.render('index', {weatherResults: [], username: 'username', firstLetter: 'U'});
     }
 });
 
-router.post('/delete', async function(req, res, next) {
+router.post('/delete', async function (req, res, next) {
     try {
         const user = req.session.user;
         const city = req.body.city;
@@ -54,18 +62,18 @@ router.post('/delete', async function(req, res, next) {
         res.redirect('/');
     } catch (error) {
         console.error('Помилка при обробці запиту /delete:', error);
-        res.status(500).render('index', { error: 'Не вдалося видалити місто.' });
+        res.status(500).render('index', {error: 'Не вдалося видалити місто.'});
     }
 });
 
 router.get("/add/city", async (req, res) => {
-    try{
+    try {
         const user = req.session.user;
         const city = req.query.city;
         await favoritService.addFavorit(user.id, city);
         res.redirect('/');
-    } catch(err) {
-        res.status(err.status || 500).json({ error: err.message });
+    } catch (err) {
+        res.status(err.status || 500).json({error: err.message});
     }
 })
 
