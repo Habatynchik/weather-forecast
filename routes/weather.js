@@ -11,7 +11,7 @@ router.get("/:city", async (req, res) => {
         console.log(data)
         res.json(data);// «як є», без обробки
     } catch (err) {
-        res.status(err.status || 500).json({ error: err.message });
+        res.status(err.status || 500).json({error: err.message});
     }
 });
 
@@ -20,38 +20,37 @@ router.get("/forecast/:city", async (req, res) => {
     try {
         let city = req.params.city;
         const data = await weatherService.getForecast(city);
-        res.json(data);
     } catch (err) {
-        res.status(err.status || 500).json({ error: err.message });
+        res.status(err.status || 500).json({error: err.message});
     }
-    await saveForecastQuery({
-        city: data.city.name,
-        timestamp: new Date(),
-        forecast: data.list.map(item => ({
-            time: item.dt_txt,
-            temp: item.main.temp,
-            condition: item.weather[0].description
-        }))
-    });
+    res.json(data);
 });
 router.get("/current/:city", async (req, res) => {
     try {
+        const id = req.session.id;
         let city = req.params.city;
+        const username = req.session.username;
         const data = await weatherService.getWeather(city);
-        res.json(data);
     } catch (err) {
-        res.status(err.status || 500).json({ error: err.message });
+        res.status(err.status || 500).json({error: err.message});
     }
-    await saveWeatherQuery({
-        city: data.name,
-        temp: data.main.temp,
-        condition: data.weather[0].description,
-        humidity: data.main.humidity,
-        wind: data.wind.speed,
-        timestamp: new Date(),
-    });
+    if (req.session.user) {
+        const user = req.session.user;
+        const temp = data.main.temp;
+        const humidity = data.main.humidity;
+        const wind_speed = data.wind.speed;
+    }
+        await saveWeatherQuery({
+            userid: req.session.user.id,
+            city: data.name,
+            temp,
+            humidity,
+            wind_speed,
+            date: new Date()
+        });
+        res.json(data);
+    }
+)
+    ;
 
-});
-
-
-module.exports = router;
+    module.exports = router;

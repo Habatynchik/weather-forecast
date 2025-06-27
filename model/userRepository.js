@@ -2,8 +2,10 @@ const runQuery = require('../configurations/db')
 const userQueries = require('./queries/userQueries')
 
 const userRepository = {
-    getAllUsers: () => {},
-    getUserById: (id) => {},
+    getAllUsers: () => {
+    },
+    getUserById: (id) => {
+    },
     getUserByUsername: async (username) => {
         try {
             let data = await runQuery(userQueries.getUserByUsername, [username])
@@ -20,7 +22,7 @@ const userRepository = {
             throw error;
         }
     },
-    createUser: async (username, email,  password) => {
+    createUser: async (username, email, password) => {
         try {
             let data = await runQuery(userQueries.createUser, [username, email, password])
             return data.rows[0];
@@ -36,7 +38,7 @@ const userRepository = {
             throw error;
         }
     },
-    deleteCity:  async (user_id, city) => {
+    deleteCity: async (user_id, city) => {
         try {
             let data = await runQuery(userQueries.DELETE_CITY, [user_id, city])
             return data.rows;
@@ -45,13 +47,21 @@ const userRepository = {
         }
     },
     addFavorites: async (user_id, favorites) => {
-        try{
+        try {
             let data = await runQuery(userQueries.ADD_FAVORITE_CITY, [user_id, favorites])
             return data.rows;
         } catch (error) {
             throw new Error("ERROR ADD CITY");
         }
     },
+}
+saveWeatherQuery: async (city, temp, condition, humidity, wind, timestamp) => {
+    try {
+        let data = await runQuery(userQueries.SAVE_WEATHER_QUERY, [city, temp, condition, humidity, wind, timestamp])
+        return data.rows;
+    } catch (error) {
+        throw new Error("ERROR SAVE WEATHER QUERY");
+    }
 }
 
 module.exports = userRepository;

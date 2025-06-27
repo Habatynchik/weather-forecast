@@ -8,6 +8,6 @@ const userQueries = {
     FAVORITE_CITY: "SELECT city FROM favorite WHERE userid = $1",
     DELETE_CITY: "DELETE FROM favorite WHERE userid = $1 AND city = $2 RETURNING *",
     ADD_FAVORITE_CITY: "INSERT INTO favorite (userid, city) VALUES ($1, $2) RETURNING *;",
+    SAVE_WEATHER_QUERY: "INSERT INTO queries (userid, city, temp, humidity, wind_speed, date) VALUES ($1, $2, $3, $4, $5, $6)  RETURNING *;"
 };
-
 module.exports = userQueries;
