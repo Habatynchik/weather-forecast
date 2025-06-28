@@ -14,6 +14,7 @@ let mainRouter = require('./routes/main');
 let authRouter = require('./routes/auth');
 let weatherRouter = require('./routes/weather');
 let citiesRouter = require('./routes/cities');
+let historyRouter = require('./routes/hitory');
 
 let app = express();
 
@@ -48,6 +49,7 @@ app.use('/main', mainRouter);
 app.use('/weather', weatherRouter);
 app.use('/cities', citiesRouter);
 app.use('/admin', adminRouter);
+app.use('/history', historyRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

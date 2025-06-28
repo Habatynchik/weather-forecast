@@ -1,18 +1,11 @@
-const db = require("../db");
+const userRepository = require("../model/userRepository");
 
-const getLastWeatherQueriesByUserId = async (userId) => {
-    const query = `
-        SELECT city, temperature, cloudiness, wind, request_time
-        FROM weather_requests
-        WHERE userid = $1
-        ORDER BY request_time DESC
-        LIMIT 5;
-    `;
+async function getUserLast5Queries(userId) {
+    if (!userId) throw new Error("User ID is required");
 
-    const result = await db.query(query, [userId]);
-    return result.rows;
-};
+    return await userRepository.getLast5QueriesByUserId(userId);
+}
 
 module.exports = {
-    getLastWeatherQueriesByUserId,
+    getUserLast5Queries,
 };

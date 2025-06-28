@@ -1,40 +1,56 @@
-const express = require("express");
-const router = express.Router();
-const historyService = require("../services/historyService");
-
-router.get("/:userId", async (req, res) => {
-    const { userId } = req.params;
-
-    try {
-        const history = await historyService.getLastWeatherQueriesByUserId(userId);
-        console.log(history);
-        res.status(200).json({ success: true, data: history });
-    } catch (error) {
-        console.error("Error in /history:", error);
-        res.status(500).json({ success: false, message: "Server error" });
-    }
-});
-
-module.exports = router;
 
 const express = require("express");
 const router = express.Router();
 const historyService = require("../services/historyService");
+const userRepository = require("../model/userRepository");
+const weatherService = require("../services/weatherService");
 
-
-router.get("/:userId", async (req, res) => {
-    const { userId } = req.params;
-
+router.get("/", async (req, res) => {
     try {
-        const history = await historyService.getLastWeatherQueriesByUserId(userId);
-        const username = "Користувач";
-        console.log(history);
-        res.render("history", { history, username });
+        const userId = req.session?.user?.id;
+        const sessionUser = req.session.user;
+
+        if (!userId || !sessionUser) {
+            return res.status(401).send("Not authenticated");
+        }
+
+        const data = await historyService.getUserLast5Queries(userId);
+        const favoriteCities = await userRepository.getAllFavoritesCities(sessionUser.id);
+
+        const firstLetter = req.session.user.username[0];
+        if (!favoriteCities || favoriteCities.length === 0) {
+            return res.render('history', {
+                weatherResults: [],
+                username: req.session.user.username,
+                firstLetter: firstLetter,
+                queries: data
+            });
+        }
+
+
+        const weatherDataPromises = favoriteCities.map(entry =>
+            weatherService.getWeather(entry.city)
+        );
+
+        const weatherResults = await Promise.all(weatherDataPromises);
+
+        /* weatherResults.forEach((weather, i) => {
+             console.log(`Погода в ${favoriteCities[i].city}:`, weather);
+         }); */
+
+        res.render('history', {
+            weatherResults: weatherResults,
+            username: req.session.user.username,
+            firstLetter: firstLetter,
+            queries: data
+        });
+
     } catch (err) {
-        console.error("Помилка при отриманні історії:", err);
-        res.status(500).send("Помилка сервера");
+        console.error("Error in /user/history:", err);
+        res.status(500).send("Server error");
     }
 });
 
 module.exports = router;
+
 
