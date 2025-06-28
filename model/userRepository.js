@@ -62,6 +62,11 @@ const userRepository = {
             throw new Error("ERROR SAVE WEATHER QUERY");
         }
     },
+    getLast5QueriesByUserId: async (userId) => {
+        const result = await runQuery(userQueries.getLast5QueriesByUserId, [userId]);
+        return result.rows;
+    },
+
 }
 
 

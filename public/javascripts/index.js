@@ -1,22 +1,22 @@
-const profileBtn = document.getElementById('burger-btn');
-const burgerMenu = document.querySelector('.burger-menu');
+const burgerBtn = document.getElementById('burger-btn');
+    const burgerMenu = document.querySelector('.burger-menu');
 
-function toggleMenu() {
-    const isVisible = burgerMenu.style.display === 'block';
-    burgerMenu.style.display = isVisible ? 'none' : 'block';
-    profileBtn.setAttribute('aria-expanded', !isVisible);
+    function toggleMenu() {
+    burgerMenu.classList.toggle('visible');
+    const isVisible = burgerMenu.classList.contains('visible');
+    burgerBtn.setAttribute('aria-expanded', isVisible);
 }
 
-profileBtn.addEventListener('click', (e) => {
+    burgerBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     toggleMenu();
 });
 
-
-document.addEventListener('click', () => {
-    burgerMenu.style.display = 'none';
-    profileBtn.setAttribute('aria-expanded', false);
+    document.addEventListener('click', () => {
+    burgerMenu.classList.remove('visible');
+    burgerBtn.setAttribute('aria-expanded', false);
 });
 
-// Prevent closing when clicking inside menu
-burgerMenu.addEventListener('click', e => e.stopPropagation());
+    burgerMenu.addEventListener('click', (e) => {
+    e.stopPropagation(); // не ховає меню при кліку всередині
+});
