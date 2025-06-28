@@ -34,6 +34,16 @@ const authService = {
             throw error;
         }
     },
+    check: async (sessionUser) => {
+        if (!sessionUser) {
+            throw new Error('Not authenticated');
+        }
+        let user = await userRepository.getUserById(sessionUser.id);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        return user;
+    }
 };
 
 module.exports = authService;

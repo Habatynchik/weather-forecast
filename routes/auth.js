@@ -18,6 +18,16 @@ router.post('/login', async function (req, res, next) {
     }
 });
 
+router.get('/check', async function(req, res) {
+    try {
+        const user = await authService.check(req.session.user);
+        res.json({ authenticated: true, user });
+    } catch (e) {
+        res.status(401).json({ authenticated: false, error: e.message });
+    }
+});
+
+
 router.get('/register', function(req, res, next) {
     res.render('register');
 });

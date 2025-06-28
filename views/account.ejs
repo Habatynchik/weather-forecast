@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <link rel='stylesheet' href='/stylesheets/index.css' />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="/javascripts/index.js"></script>
+    <script src="/javascripts/account.js"></script>
   </head>
   <body>
 
@@ -19,9 +19,6 @@
       <h1>Weather for everyone</h1>
     </div>
     <div class="centerHead">
-      <div class="search-input">
-        <input type="text" placeholder="Пошук..." class="city-name">
-      </div>
       <button class="burger-menu" onclick="window.location.href = '/';">Назад</button>
     </div>
   </header>
@@ -32,10 +29,27 @@
           <h1>Налаштування акаунту</h1>
         </div>
 
-      </div>
-      
-    </main>
+        <div class="favorites">
+          <h2>Улюблені міста (до 3)</h2>
 
+          <div class="favorite-city">
+            <label>Місто 1:</label>
+            <input type="text" name="city1" placeholder="Введіть місто" />
+          </div>
+
+          <div class="favorite-city">
+            <label>Місто 2:</label>
+            <input type="text" name="city2" placeholder="Введіть місто" />
+          </div>
+
+          <div class="favorite-city">
+            <label>Місто 3:</label>
+            <input type="text" name="city3" placeholder="Введіть місто" />
+          </div>
+
+        </div>
+      </div>
+    </main>
 
     <footer>
       <h3>Досить гортати! Краще зареєструйся або увійди!</h3>
