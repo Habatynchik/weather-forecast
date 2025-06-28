@@ -25,19 +25,6 @@ async function runQuery(query, params = []) {
         client.release();
     }
 }
-
-async function saveWeatherQuery({ userid, city, temp, humidity, wind_speed, date }) {
-    try {
-        const query = `INSERT INTO queries (userid, city, temp, humidity, wind_speed, date) VALUES ($1, $2, $3, $4, $5, $6)`;
-        const values = [userid, city, temp, humidity, wind_speed, date];
-
-        await pool.query(query, values);
-    } catch (error) {
-        console.error('Помилка при збереженні погоди:', error);
-        throw error;
-    }
-}
-
-    require('dotenv').config();
-    console.log('Loaded ENV:', process.env.DATABASE_HOST);
-    module.exports = runQuery;
+require('dotenv').config();
+console.log('Loaded ENV:', process.env.DATABASE_HOST);
+module.exports = runQuery;

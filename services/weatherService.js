@@ -1,5 +1,6 @@
 const axios = require('axios');
 require('dotenv').config('../.env');
+const userRepository = require('../model/userRepository');
 
 const WEATHER_API_KEY = process.env.FORECAST_API_KEY;
 const BASE_URL = 'https://api.openweathermap.org/data/2.5';
@@ -13,6 +14,7 @@ const weatherService = {
                 units: 'metric',
             },
         });
+        console.log(response.data);
         return response.data;
     },
 
@@ -26,6 +28,14 @@ const weatherService = {
         });
         return response.data;
     },
+    async saveQuery(userid, city, temp, humidity, wind, date) {
+        try{
+            let data = await userRepository.saveWeatherQuery(userid,city, temp, humidity, wind, date);
+            return data;
+        } catch(err) {
+            throw new  Error('Error while trying to save weather query');
+        }
+    }
 };
 
 module.exports = weatherService;

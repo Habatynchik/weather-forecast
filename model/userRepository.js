@@ -54,9 +54,9 @@ const userRepository = {
             throw new Error("ERROR ADD CITY");
         }
     },
-    saveWeatherQuery: async (city, temp, condition, humidity, wind, timestamp) => {
+    saveWeatherQuery: async (userid, city, temp, humidity, wind, date) => {
         try {
-            let data = await runQuery(userQueries.SAVE_WEATHER_QUERY, [city, temp, condition, humidity, wind, timestamp])
+            let data = await runQuery(userQueries.SAVE_WEATHER_QUERY, [userid, city, temp, humidity, wind, date])
             return data.rows;
         } catch (error) {
             throw new Error("ERROR SAVE WEATHER QUERY");
