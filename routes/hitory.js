@@ -15,6 +15,16 @@ router.get("/", async (req, res) => {
         }
 
         const data = await historyService.getUserLast5Queries(userId);
+        const formattedQueries = data.map(entry => {
+            const d = new Date(entry.date); // АБО entry.createdAt, залежно від поля
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return {
+                ...entry,
+                date: `${year}-${month}-${day}`
+            };
+        });
         const favoriteCities = await userRepository.getAllFavoritesCities(sessionUser.id);
 
         const firstLetter = req.session.user.username[0];
@@ -23,7 +33,7 @@ router.get("/", async (req, res) => {
                 weatherResults: [],
                 username: req.session.user.username,
                 firstLetter: firstLetter,
-                queries: data
+                queries: formattedQueries
             });
         }
 
@@ -42,7 +52,7 @@ router.get("/", async (req, res) => {
             weatherResults: weatherResults,
             username: req.session.user.username,
             firstLetter: firstLetter,
-            queries: data
+            queries: formattedQueries
         });
 
     } catch (err) {
