@@ -7,6 +7,41 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="/stylesheets/registerAndAuthorization.css">
+    <script defer>
+        const button = document.querySelector('button');
+        const usernameInput = document.querySelector('.userName');
+        const passwordInput = document.querySelector('.userPassword');
+
+        button.addEventListener('click', async () => {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!username || !password) {
+                alert('Введіть ім\'я і пароль!');
+                return;
+            }
+
+            try {
+                const res = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert(data.message);
+                    usernameInput.value = '';
+                    passwordInput.value = '';
+                } else {
+                    alert(data.message || 'Помилка при реєстрації');
+                }
+            } catch (e) {
+                alert('Помилка з\'єднання з сервером');
+            }
+        });
+    </script>
 </head>
 <body>
 <div class="void">
