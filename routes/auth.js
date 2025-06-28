@@ -15,7 +15,7 @@ router.post('/signIn', async function(req, res, next) {
     try {
         await authService.register(username, email,  password);
         let user = await authService.authenticate(username, password);
-        req.session.user = {id: user.id, username:user.name};
+        req.session.user = {id: user.id, username:user.name, role: user.role};
         console.log(req.session.user);
         res.redirect('/');
     } catch (error) {
@@ -34,7 +34,7 @@ router.post('/signUp', async function(req, res, next) {
     let password = req.body.password;
     try {
         let user = await authService.authenticate(username, password);
-        req.session.user = {id: user.id, username:user.name};
+        req.session.user = {id: user.id, username:user.name, role: user.role};
         console.log(req.session.user);
         res.redirect('/');
     } catch (e) {
