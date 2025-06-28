@@ -37,12 +37,18 @@ $(document).ready(function () {
                 url: `/get/${city}`,
                 dataType: "json", 
                 success: function (res) {
-                    $(".weather").empty(); 
+                    $(".weather").empty();
                     $(".weather").html(`
-                        <h2>${res.city}</h2>
-                        <p>${res.temp} °C, ${res.description}</p>
-                        <p>Швидкість вітру: ${res.windSpeed} м/с</p>
-                        <img src="http://openweathermap.org/img/wn/${res.img}@2x.png" alt="Погода іконка" />
+                        <div class="wetherSearch">
+                <div class="wetherBar">
+                    <img class="wetherImg" src="http://openweathermap.org/img/wn/${res.img}@2x.png" alt="Погода іконка">
+                    <h1>${res.city}</h1>
+                </div>
+                <h2>Температура: ${res.temp} °C</h2>
+                <h2>Опис: ${res.description}</h2>
+                <h2>Швидкість вітру: ${res.windSpeed} м/с</h2>
+            </div>
+                        
                     `);
                 },
                 error: function(err) {
