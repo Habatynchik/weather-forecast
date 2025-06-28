@@ -44,9 +44,9 @@ $(document).ready(function () {
                     <img class="wetherImg" src="http://openweathermap.org/img/wn/${res.img}@2x.png" alt="Погода іконка">
                     <h1>${res.city}</h1>
                 </div>
-                <h2>Температура: ${res.temp} °C</h2>
-                <h2>Опис: ${res.description}</h2>
-                <h2>Швидкість вітру: ${res.windSpeed} м/с</h2>
+                <h1>Температура: ${res.temp} °C</h1>
+                <h1>Опис: ${res.description}</h1>
+                <h1>Швидкість вітру: ${res.windSpeed} м/с</h1>
             </div>
                         
                     `);
