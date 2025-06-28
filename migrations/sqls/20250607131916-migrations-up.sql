@@ -35,7 +35,4 @@ create table IF NOT EXISTS favorite
     foreign key (userid) references users (id)
 );
 
-INSERT INTO favorite (userid, city)
-VALUES (15, 'Kyiv'),
-       (15, 'Lviv');
 
