@@ -15,7 +15,6 @@ function getWeatherIcon(condition) {
     };
 }
 
-
 async function fetchCurrentWeather(city) {
     const res = await fetch(`/weather/current/${city}`);
     const data = await res.json();
@@ -33,7 +32,6 @@ async function fetchWeather(city) {
     const data = await res.json();
     return data.list;
 }
-
 
 function groupByDay(list) {
     const days = {};
@@ -83,10 +81,10 @@ async function renderCurrentWeather(city) {
       <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z"/>
       </svg></button>
       </form>
-      <h3 id="city" width="100" height="50"></h3>
+      <h3 id="city">${name}</h3>
       <h3>Today (${new Date().toLocaleDateString()})</h3>
-      <img src="${icon.static}" data-hover="${icon.animated}" class="weather-icon-hover">
-      <h1 id="current" width="100" height="50"></h1>
+      <img src="${icon.static}" data-hover="${icon.animated}" class="weather-icon-hover" alt="weather icon">
+      <h1 id="current">${temp}°C</h1>
       <div class="wind_humidity">
        <p id="wind"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wind" viewBox="0 0 16 16">
   <path d="M12.5 2A2.5 2.5 0 0 0 10 4.5a.5.5 0 0 1-1 0A3.5 3.5 0 1 1 12.5 8H.5a.5.5 0 0 1 0-1h12a2.5 2.5 0 0 0 0-5m-7 1a1 1 0 0 0-1 1 .5.5 0 0 1-1 0 2 2 0 1 1 2 2h-5a.5.5 0 0 1 0-1h5a1 1 0 0 0 0-2M0 9.5A.5.5 0 0 1 .5 9h10.042a3 3 0 1 1-3 3 .5.5 0 0 1 1 0 2 2 0 1 0 2-2H.5a.5.5 0 0 1-.5-.5"/>
@@ -97,22 +95,16 @@ async function renderCurrentWeather(city) {
       </div>
     </div>
   `;
-    document.getElementById('current').innerHTML=`${temp}°C`;
-    document.getElementById('city').innerHTML=`${name}`;
-   /* document.getElementById('wind').innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wind" viewBox="0 0 16 16">
-  <path d="M12.5 2A2.5 2.5 0 0 0 10 4.5a.5.5 0 0 1-1 0A3.5 3.5 0 1 1 12.5 8H.5a.5.5 0 0 1 0-1h12a2.5 2.5 0 0 0 0-5m-7 1a1 1 0 0 0-1 1 .5.5 0 0 1-1 0 2 2 0 1 1 2 2h-5a.5.5 0 0 1 0-1h5a1 1 0 0 0 0-2M0 9.5A.5.5 0 0 1 .5 9h10.042a3 3 0 1 1-3 3 .5.5 0 0 1 1 0 2 2 0 1 0 2-2H.5a.5.5 0 0 1-.5-.5"/>
-</svg> ${wind}`;
-    document.getElementById('humidity').innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-droplet-fill" viewBox="0 0 16 16">
-  <path d="M8 16a6 6 0 0 0 6-6c0-1.655-1.122-2.904-2.432-4.362C10.254 4.176 8.75 2.503 8 0c0 0-6 5.686-6 10a6 6 0 0 0 6 6M6.646 4.646l.708.708c-.29.29-1.128 1.311-1.907 2.87l-.894-.448c.82-1.641 1.717-2.753 2.093-3.13"/>
-</svg> ${humidity}`; */
 
-
+    // Зміна іконок при наведенні
     const currentImg = container.querySelector('.weather-icon-hover');
     currentImg.addEventListener('mouseenter', () => currentImg.src = icon.animated);
     currentImg.addEventListener('mouseleave', () => currentImg.src = icon.static);
+
+    // Рендер одягу
+    await renderCurrentOutfit(condition, temp, name);
 }
 
-// === RENDER FORECAST ===
 async function renderForecast(city) {
     document.getElementById('forecast-container').style.display = 'flex';
     await renderCurrentWeather(city);
@@ -130,7 +122,7 @@ async function renderForecast(city) {
 
         div.innerHTML = `
       <h3>${day}</h3>
-      <img src="${icon.static}" data-hover="${icon.animated}" class="weather-icon-hover">
+      <img src="${icon.static}" data-hover="${icon.animated}" class="weather-icon-hover" alt="weather icon">
       <canvas id="chart-${i}" width="300" height="100"></canvas>
     `;
 
@@ -156,6 +148,7 @@ input.addEventListener('input', async () => {
 
     if (query.length < 2) {
         suggestions.classList.remove('show');
+        suggestions.style.display = 'none';
         return;
     }
 
@@ -166,7 +159,6 @@ input.addEventListener('input', async () => {
         }
 
         const cities = await res.json();
-        console.log(cities); // для дебагу
 
         suggestions.innerHTML = '';
 
@@ -177,45 +169,114 @@ input.addEventListener('input', async () => {
                 li.addEventListener('click', () => {
                     input.value = city.name;
                     suggestions.classList.remove('show');
+                    suggestions.style.display = 'none';
+                    handleCitySearch(city.name);
                 });
                 suggestions.appendChild(li);
             });
-            suggestions.style.display = 'inline-block';
+            suggestions.style.display = 'block';
             suggestions.classList.add('show');
         } else {
             suggestions.classList.remove('show');
+            suggestions.style.display = 'none';
         }
     } catch (error) {
         console.error('Error fetching cities:', error);
     }
 });
 
-$(document).on("click", "#suggestions li", function () {
-    const city = $(this).text();
-    handleCitySearch(city);
-});
-
-
 $('.search-icon').on('click', () => {
-    const city = input.value;
+    const city = input.value.trim();
     handleCitySearch(city);
 });
 $('#search_btn').on('click', () => {
-    const city = input.value;
+    const city = input.value.trim();
     handleCitySearch(city);
 });
-
 input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-        const city = input.value;
+        e.preventDefault();
+        const city = input.value.trim();
         handleCitySearch(city);
     }
 });
 
 function handleCitySearch(city) {
     if (city) {
-        renderForecast(city.trim());
-        input.value = city.trim();
+        renderForecast(city);
+        input.value = city;
         suggestions.style.display = 'none';
     }
+}
+
+// --- Outfit Logic ---
+
+function Outfit(condition, temp) {
+    const weather = condition.toLowerCase();
+
+    if (temp >= 15) {
+        // Легкий одяг
+        if (weather.includes('rain')) return ['umbrella', 'jacket', 'trousers', 'shoes'];
+        if (weather.includes('cloud')) return ['jacket', 't-shirt', 'shoes'];
+        if (weather.includes('clear')) return ['t-shirt', 'shorts', 'shoes'];
+        return ['t-shirt', 'shoes'];
+    } else {
+        // Зимовий одяг
+        if (weather.includes('rain')) return ['umbrella', 'jacket', 'trousers', 'boots'];
+        if (weather.includes('snow')) return ['santa-hat', 'jacket', 'trousers', 'boots'];
+        if (weather.includes('cloud')) return ['hat', 'jacket', 'trousers', 'shoes'];
+        return ['hat', 'jacket', 'trousers', 'shoes'];
+    }
+}
+
+const outfitCategories = {
+    'hat': 'head-layer',
+    'santa-hat': 'head-layer',
+    'jacket': 'top-layer',
+    't-shirt': 'top-layer',
+    'shorts': 'bottom-layer',
+    'trousers': 'bottom-layer',
+    'boots': 'shoes-layer',
+    'shoes': 'shoes-layer',
+    'umbrella': 'umbrella-layer'
+};
+
+function getLayerForClothing(itemName) {
+    return outfitCategories[itemName] || null;
+}
+
+function applyOutfit(clothes) {
+    // Очистити всі шари перед додаванням
+    Object.values(outfitCategories).forEach(layerId => {
+        const layer = document.getElementById(layerId);
+        if (layer) layer.innerHTML = '';
+    });
+
+    // Додати картинки одягу
+    clothes.forEach(item => {
+        const layerId = getLayerForClothing(item);
+        if (layerId) {
+            const layerEl = document.getElementById(layerId);
+            if (layerEl) {
+                const img = document.createElement('img');
+                img.src = `/icons/outfit/${item}.png`;
+                img.alt = item;
+                layerEl.appendChild(img);
+            }
+        }
+    });
+}
+
+async function renderCurrentOutfit(condition, temp, name) {
+    const clothes = Outfit(condition, temp);
+    applyOutfit(clothes);
+
+    const container = document.getElementById('current-outfit');
+    container.style.display = 'flex';
+    container.innerHTML = `
+        <div class="today-weather">
+          <h3>${name}</h3>
+          <h3>Today (${new Date().toLocaleDateString()})</h3>
+        </div>
+    `;
 }

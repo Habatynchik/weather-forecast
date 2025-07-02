@@ -13,20 +13,19 @@
     <script src='/javascripts/outfit.js'></script>
 </head>
 <body>
+
 <div class="main">
-    <div class="current-outfit"></div>
-    <div class="forecast-outfit"></div>
-    <img src="/icons/outfit/standing-man.png alt=">
-    <img src="/icons/outfit/boots.png alt=">
-    <img src="/icons/outfit/hat.png alt=">
-    <img src="/icons/outfit/santa-hat.png alt=">
-    <img src="/icons/outfit/t-shirt.png alt=">
-    <img src="/icons/outfit/trousers.png alt=">
-    <img src="/icons/outfit/shorts.png alt=">
-    <img src="/icons/outfit/jacket.png alt=">
-    <img src="/icons/outfit/umbrella.png alt=">
+    <div id="outfit-wrapper" style="position: relative; width: 300px; height: 500px; flex-shrink: 0;">
+        <div id="base-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+            <img src="/icons/outfit/standing-man.png" alt="Base Man"
+                 style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
+        <div id="head-layer" class="outfit-layer"></div>
+        <div id="top-layer" class="outfit-layer"></div>
+        <div id="bottom-layer" class="outfit-layer"></div>
+        <div id="shoes-layer" class="outfit-layer"></div>
+        <div id="umbrella-layer" class="outfit-layer"></div>
+    </div>
 </div>
-
-
 </body>
 </html>
