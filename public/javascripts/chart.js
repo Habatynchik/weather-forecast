@@ -215,13 +215,11 @@ function Outfit(condition, temp) {
     const weather = condition.toLowerCase();
 
     if (temp >= 15) {
-        // Легкий одяг
         if (weather.includes('rain')) return ['umbrella', 'jacket', 'trousers', 'shoes'];
         if (weather.includes('cloud')) return ['jacket', 't-shirt', 'shoes'];
         if (weather.includes('clear')) return ['t-shirt', 'shorts', 'shoes'];
         return ['t-shirt', 'shoes'];
     } else {
-        // Зимовий одяг
         if (weather.includes('rain')) return ['umbrella', 'jacket', 'trousers', 'boots'];
         if (weather.includes('snow')) return ['santa-hat', 'jacket', 'trousers', 'boots'];
         if (weather.includes('cloud')) return ['hat', 'jacket', 'trousers', 'shoes'];
@@ -245,38 +243,59 @@ function getLayerForClothing(itemName) {
     return outfitCategories[itemName] || null;
 }
 
-function applyOutfit(clothes) {
-    // Очистити всі шари перед додаванням
-    Object.values(outfitCategories).forEach(layerId => {
-        const layer = document.getElementById(layerId);
-        if (layer) layer.innerHTML = '';
+function applyOutfit(clothes, prefix = '') {
+    Object.values(outfitCategories).forEach(layer => {
+        const el = document.getElementById(`${prefix}${layer}`);
+        if (el) el.innerHTML = '';
     });
 
-    // Додати картинки одягу
     clothes.forEach(item => {
-        const layerId = getLayerForClothing(item);
-        if (layerId) {
-            const layerEl = document.getElementById(layerId);
-            if (layerEl) {
-                const img = document.createElement('img');
-                img.src = `/icons/outfit/${item}.png`;
-                img.alt = item;
-                layerEl.appendChild(img);
-            }
+        const layer = getLayerForClothing(item);
+        const el = document.getElementById(`${prefix}${layer}`);
+        if (el) {
+            const img = document.createElement('img');
+            img.src = `/icons/outfit/${item}.png`;
+            img.alt = item;
+            el.appendChild(img);
         }
     });
 }
 
-async function renderCurrentOutfit(condition, temp, name) {
+async function renderCurrentOutfit(condition, temp) {
     const clothes = Outfit(condition, temp);
-    applyOutfit(clothes);
-
     const container = document.getElementById('current-outfit');
     container.style.display = 'flex';
+
     container.innerHTML = `
-        <div class="today-weather">
-          <h3>${name}</h3>
-          <h3>Today (${new Date().toLocaleDateString()})</h3>
+        <div class="outfit-wrapper-inner">
+            <img src="/icons/outfit/standing-man.png" alt="Base Man">
+            <div id="head-layer" class="outfit-layer"></div>
+            <div id="top-layer" class="outfit-layer"></div>
+            <div id="bottom-layer" class="outfit-layer"></div>
+            <div id="shoes-layer" class="outfit-layer"></div>
+            <div id="umbrella-layer" class="outfit-layer"></div>
         </div>
     `;
+
+    applyOutfit(clothes);
 }
+
+async function renderForecastOutfit(condition, temp, index) {
+    const clothes = Outfit(condition, temp);
+    const container = document.getElementById(`forecast-outfit-${index}`);
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="outfit-wrapper-inner">
+            <img src="/icons/outfit/standing-man.png" alt="Base Man">
+            <div id="forecast-head-layer-${index}" class="outfit-layer"></div>
+            <div id="forecast-top-layer-${index}" class="outfit-layer"></div>
+            <div id="forecast-bottom-layer-${index}" class="outfit-layer"></div>
+            <div id="forecast-shoes-layer-${index}" class="outfit-layer"></div>
+            <div id="forecast-umbrella-layer-${index}" class="outfit-layer"></div>
+        </div>
+    `;
+
+    applyOutfit(clothes, `forecast-${index}-`);
+}
+
