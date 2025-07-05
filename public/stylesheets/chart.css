@@ -196,3 +196,16 @@ body {
     height: auto;
     object-fit: contain;
 }
+#current-outfit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.outfit-wrapper-inner {
+    position: relative;
+    width: 150px;
+    height: 300px;
+}
+

@@ -106,9 +106,10 @@ async function renderCurrentWeather(city) {
 }
 
 async function renderForecast(city) {
+    const container = document.getElementById('forecast-container');
+    container.style.display = 'flex'; // ✅ це обов’язково
     const list = await fetchWeather(city);
     const grouped = groupByDay(list);
-    const container = document.getElementById('forecast-container');
     container.innerHTML = '';
 
     grouped.forEach(([day, entries], i) => {
@@ -296,15 +297,22 @@ const outfitLayers = {
 };
 
 function applyForecastOutfit(clothes, parent) {
-    Object.entries(outfitLayers).forEach(([item, layer]) => {
-        const layerDiv = document.createElement('div');
-        layerDiv.classList.add('outfit-layer', layer);
-        if (clothes.includes(item)) {
-            const img = document.createElement('img');
-            img.src = `/icons/outfit/${item}.png`;
-            layerDiv.appendChild(img);
-        }
-        parent.appendChild(layerDiv);
+    const base = document.createElement('img');
+    base.src = '/icons/outfit/standing-man.png';
+    base.alt = 'Base Man';
+    base.style.position = 'absolute';
+    base.style.zIndex = '0';
+    parent.appendChild(base);
+
+    clothes.forEach(item => {
+        const layer = outfitLayers[item];
+        const div = document.createElement('div');
+        div.classList.add('outfit-layer', layer);
+        const img = document.createElement('img');
+        img.src = `/icons/outfit/${item}.png`;
+        img.alt = item;
+        div.appendChild(img);
+        parent.appendChild(div);
     });
 }
 
