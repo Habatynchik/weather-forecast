@@ -106,36 +106,42 @@ async function renderCurrentWeather(city) {
 }
 
 async function renderForecast(city) {
-    document.getElementById('forecast-container').style.display = 'flex';
-    await renderCurrentWeather(city);
     const list = await fetchWeather(city);
     const grouped = groupByDay(list);
     const container = document.getElementById('forecast-container');
     container.innerHTML = '';
 
     grouped.forEach(([day, entries], i) => {
-        const div = document.createElement('div');
-        div.className = 'forecast-day';
+        const avgTemp = Math.round(entries.reduce((sum, e) => sum + e.temp, 0) / entries.length);
+        const condition = entries[0].condition;
 
-        const condition = entries[0].condition.toLowerCase();
-        const icon = getWeatherIcon(condition);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'forecast-day-wrapper';
 
-        div.innerHTML = `
+        const weatherDiv = document.createElement('div');
+        weatherDiv.className = 'forecast-day';
+        weatherDiv.innerHTML = `
       <h3>${day}</h3>
-      <img src="${icon.static}" data-hover="${icon.animated}" class="weather-icon-hover" alt="weather icon">
-      <canvas id="chart-${i}" width="300" height="100"></canvas>
+      <img src="/icons/static/${normalizeCondition(condition)}.png" class="weather-icon-hover">
+      <canvas id="chart-${i}" width="250" height="100"></canvas>
     `;
 
-        container.appendChild(div);
+        const outfitDiv = document.createElement('div');
+        outfitDiv.className = 'forecast-outfit';
+
+        const base = document.createElement('img');
+        base.src = '/icons/outfit/standing-man.png';
+        outfitDiv.appendChild(base);
+
+        const clothes = Outfit(condition, avgTemp);
+        applyForecastOutfit(clothes, outfitDiv);
+
+        wrapper.appendChild(weatherDiv);
+        wrapper.appendChild(outfitDiv);
+        container.appendChild(wrapper);
+
         const ctx = document.getElementById(`chart-${i}`);
         createChart(ctx, entries.map(e => e.time), entries.map(e => e.temp));
-    });
-
-    document.querySelectorAll('.weather-icon-hover').forEach(img => {
-        const animated = img.dataset.hover;
-        const staticSrc = img.src;
-        img.addEventListener('mouseenter', () => img.src = animated);
-        img.addEventListener('mouseleave', () => img.src = staticSrc);
     });
 }
 
@@ -208,12 +214,11 @@ function handleCitySearch(city) {
         suggestions.style.display = 'none';
     }
 }
-
 // --- Outfit Logic ---
+
 
 function Outfit(condition, temp) {
     const weather = condition.toLowerCase();
-
     if (temp >= 15) {
         if (weather.includes('rain')) return ['umbrella', 'jacket', 'trousers', 'shoes'];
         if (weather.includes('cloud')) return ['jacket', 't-shirt', 'shoes'];
@@ -226,7 +231,6 @@ function Outfit(condition, temp) {
         return ['hat', 'jacket', 'trousers', 'shoes'];
     }
 }
-
 const outfitCategories = {
     'hat': 'head-layer',
     'santa-hat': 'head-layer',
@@ -279,23 +283,30 @@ async function renderCurrentOutfit(condition, temp) {
 
     applyOutfit(clothes);
 }
+const outfitLayers = {
+    'hat': 'head-layer',
+    'santa-hat': 'head-layer',
+    'jacket': 'top-layer',
+    't-shirt': 'top-layer',
+    'shorts': 'bottom-layer',
+    'trousers': 'bottom-layer',
+    'boots': 'shoes-layer',
+    'shoes': 'shoes-layer',
+    'umbrella': 'umbrella-layer'
+};
 
-async function renderForecastOutfit(condition, temp, index) {
-    const clothes = Outfit(condition, temp);
-    const container = document.getElementById(`forecast-outfit-${index}`);
-    if (!container) return;
-
-    container.innerHTML = `
-        <div class="outfit-wrapper-inner">
-            <img src="/icons/outfit/standing-man.png" alt="Base Man">
-            <div id="forecast-head-layer-${index}" class="outfit-layer"></div>
-            <div id="forecast-top-layer-${index}" class="outfit-layer"></div>
-            <div id="forecast-bottom-layer-${index}" class="outfit-layer"></div>
-            <div id="forecast-shoes-layer-${index}" class="outfit-layer"></div>
-            <div id="forecast-umbrella-layer-${index}" class="outfit-layer"></div>
-        </div>
-    `;
-
-    applyOutfit(clothes, `forecast-${index}-`);
+function applyForecastOutfit(clothes, parent) {
+    Object.entries(outfitLayers).forEach(([item, layer]) => {
+        const layerDiv = document.createElement('div');
+        layerDiv.classList.add('outfit-layer', layer);
+        if (clothes.includes(item)) {
+            const img = document.createElement('img');
+            img.src = `/icons/outfit/${item}.png`;
+            layerDiv.appendChild(img);
+        }
+        parent.appendChild(layerDiv);
+    });
 }
+
+
 
