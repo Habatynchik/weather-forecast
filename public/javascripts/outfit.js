@@ -1,22 +1,5 @@
 const clothes = Outfit(condition, temp);
-function Outfit(condition, temp) {
-    const weather = condition.toLowerCase();
 
-    // Температурна перевірка:
-    if (temp >= 15) {
-        // Легкий одяг
-        if (weather.includes('rain')) return ['umbrella', 'jacket', 'trousers', 'shoes'];
-        if (weather.includes('cloud')) return ['jacket', 't-shirt', 'shoes'];
-        if (weather.includes('clear')) return ['t-shirt', 'shorts', 'shoes'];
-        return ['t-shirt', 'shoes'];
-    } else {
-        // Зимовий одяг
-        if (weather.includes('rain')) return ['umbrella', 'jacket', 'trousers', 'boots'];
-        if (weather.includes('snow')) return ['santa-hat', 'jacket', 'trousers', 'boots'];
-        if (weather.includes('cloud')) return ['hat', 'jacket', 'trousers', 'shoes'];
-        return ['hat', 'jacket', 'trousers', 'shoes'];
-    }
-}
 async function renderCurrentOutfit(condition, temp, name) {
     const clothes = Outfit(condition, temp);
     applyOutfit(clothes);
