@@ -116,33 +116,60 @@ async function renderCurrentWeather(city) {
 
 async function renderForecast(city) {
     const container = document.getElementById('forecast-container');
-    container.style.display = 'flex'; // ✅ це обов’язково
+    container.style.display = 'flex';
+    container.innerHTML = '';
+
     const list = await fetchWeather(city);
     const grouped = groupByDay(list);
-    container.innerHTML = '';
 
     grouped.forEach(([day, entries], i) => {
         const avgTemp = Math.round(entries.reduce((sum, e) => sum + e.temp, 0) / entries.length);
         const condition = entries[0].condition;
+        const clothes = Outfit(condition, avgTemp);
 
-        const wrapper = document.createElement('div');
-        wrapper.className = 'forecast-day-wrapper';
-
+        // ===== Forecast Weather Block =====
         const weatherDiv = document.createElement('div');
         weatherDiv.className = 'forecast-day';
         weatherDiv.innerHTML = `
-        <h3>${day}</h3>
-        <img src="/icons/static/${normalizeCondition(condition)}.png" class="weather-icon-hover">
-        <canvas id="chart-${i}" width="250" height="100"></canvas>
-    `;
+            <h3>${day}</h3>
+            <img src="/icons/static/${normalizeCondition(condition)}.png" class="weather-icon-hover">
+            <canvas id="chart-${i}" width="250" height="100"></canvas>
+        `;
 
-        const clothes = Outfit(condition, avgTemp);
-        const outfitDiv = renderForecastOutfit(clothes);
+        // ===== Outfit Block with Man and Layers =====
+        const outfitDiv = document.createElement('div');
+        outfitDiv.className = 'forecast-outfit';
 
+        outfitDiv.innerHTML = `
+            <div class="outfit-wrapper-inner">
+                <img src="/icons/outfit/standing-man.png" alt="Base Man" class="base-man">
+                <div class="outfit-layer head-layer"></div>
+                <div class="outfit-layer top-layer"></div>
+                <div class="outfit-layer bottom-layer"></div>
+                <div class="outfit-layer shoes-layer"></div>
+                <div class="outfit-layer umbrella-layer"></div>
+            </div>
+        `;
+
+        clothes.forEach(item => {
+            const layer = getLayerForClothing(item);
+            const target = outfitDiv.querySelector(`.${layer}`);
+            if (target) {
+                const img = document.createElement('img');
+                img.src = `/icons/outfit/${item}.png`;
+                img.alt = item;
+                target.appendChild(img);
+            }
+        });
+
+        // ===== Wrapper for both weather and outfit blocks =====
+        const wrapper = document.createElement('div');
+        wrapper.className = 'forecast-day-wrapper';
         wrapper.appendChild(weatherDiv);
         wrapper.appendChild(outfitDiv);
         container.appendChild(wrapper);
 
+        // Draw chart
         const ctx = document.getElementById(`chart-${i}`);
         createChart(ctx, entries.map(e => e.time), entries.map(e => e.temp));
     });
