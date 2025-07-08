@@ -98,19 +98,23 @@ async function renderCurrentWeather(city) {
       </div>
     </div>
   `;
+    let outfitDiv = document.getElementById('current-outfit');
+    if (!outfitDiv) {
+        outfitDiv = document.createElement('div');
+        outfitDiv.id = 'current-outfit';
+        outfitDiv.classList.add('current-outfit'); // або будь-який потрібний клас
+        container.appendChild(outfitDiv);
+    }
+
+// Об'єднуємо в один контейнер
+    container.appendChild(outfitDiv);
     document.getElementById('current').innerHTML=`${temp}°C`;
     document.getElementById('city').innerHTML=`${name}`;
-    /* document.getElementById('wind').innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wind" viewBox="0 0 16 16">
-   <path d="M12.5 2A2.5 2.5 0 0 0 10 4.5a.5.5 0 0 1-1 0A3.5 3.5 0 1 1 12.5 8H.5a.5.5 0 0 1 0-1h12a2.5 2.5 0 0 0 0-5m-7 1a1 1 0 0 0-1 1 .5.5 0 0 1-1 0 2 2 0 1 1 2 2h-5a.5.5 0 0 1 0-1h5a1 1 0 0 0 0-2M0 9.5A.5.5 0 0 1 .5 9h10.042a3 3 0 1 1-3 3 .5.5 0 0 1 1 0 2 2 0 1 0 2-2H.5a.5.5 0 0 1-.5-.5"/>
- </svg> ${wind}`;
-     document.getElementById('humidity').innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-droplet-fill" viewBox="0 0 16 16">
-   <path d="M8 16a6 6 0 0 0 6-6c0-1.655-1.122-2.904-2.432-4.362C10.254 4.176 8.75 2.503 8 0c0 0-6 5.686-6 10a6 6 0 0 0 6 6M6.646 4.646l.708.708c-.29.29-1.128 1.311-1.907 2.87l-.894-.448c.82-1.641 1.717-2.753 2.093-3.13"/>
- </svg> ${humidity}`; */
-
 
     const currentImg = container.querySelector('.weather-icon-hover');
     currentImg.addEventListener('mouseenter', () => currentImg.src = icon.animated);
     currentImg.addEventListener('mouseleave', () => currentImg.src = icon.static);
+    outfitDiv.style.display = 'flex';
 }
 
 
@@ -127,7 +131,7 @@ async function renderForecast(city) {
         const condition = entries[0].condition;
         const clothes = Outfit(condition, avgTemp);
 
-        // ===== Forecast Weather Block =====
+        // === Прогноз погоди (окремо) ===
         const weatherDiv = document.createElement('div');
         weatherDiv.className = 'forecast-day';
         weatherDiv.innerHTML = `
@@ -136,40 +140,16 @@ async function renderForecast(city) {
             <canvas id="chart-${i}" width="250" height="100"></canvas>
         `;
 
-        // ===== Outfit Block with Man and Layers =====
-        const outfitDiv = document.createElement('div');
-        outfitDiv.className = 'forecast-outfit';
+        // === Одяг (окремо) ===
+        const outfitDiv = renderForecastOutfit(clothes); // окремий outfitDiv
 
-        outfitDiv.innerHTML = `
-            <div class="outfit-wrapper-inner">
-                <img src="/icons/outfit/standing-man.png" alt="Base Man" class="base-man">
-                <div class="outfit-layer head-layer"></div>
-                <div class="outfit-layer top-layer"></div>
-                <div class="outfit-layer bottom-layer"></div>
-                <div class="outfit-layer shoes-layer"></div>
-                <div class="outfit-layer umbrella-layer"></div>
-            </div>
-        `;
-
-        clothes.forEach(item => {
-            const layer = getLayerForClothing(item);
-            const target = outfitDiv.querySelector(`.${layer}`);
-            if (target) {
-                const img = document.createElement('img');
-                img.src = `/icons/outfit/${item}.png`;
-                img.alt = item;
-                target.appendChild(img);
-            }
-        });
-
-        // ===== Wrapper for both weather and outfit blocks =====
+        // === Обʼєднання у wrapper ===
         const wrapper = document.createElement('div');
         wrapper.className = 'forecast-day-wrapper';
         wrapper.appendChild(weatherDiv);
-        wrapper.appendChild(outfitDiv);
+        wrapper.appendChild(outfitDiv); // додаємо outfit як окремий div
         container.appendChild(wrapper);
 
-        // Draw chart
         const ctx = document.getElementById(`chart-${i}`);
         createChart(ctx, entries.map(e => e.time), entries.map(e => e.temp));
     });
@@ -251,16 +231,20 @@ async function handleCitySearch(city) {
 
 function Outfit(condition, temp) {
     const weather = condition.toLowerCase();
+
+    const basicWarm = ['t-shirt','trousers', 'shoes'];
+    const basicCold = ['santa-hat', 'jacket', 'trousers', 'boots'];
+
     if (temp >= 15) {
         if (weather.includes('rain')) return ['umbrella', 'jacket', 'trousers', 'shoes'];
-        if (weather.includes('cloud')) return ['jacket', 't-shirt', 'shoes'];
-        if (weather.includes('clear')) return ['t-shirt', 'shorts', 'shoes'];
-        return ['t-shirt', 'shoes'];
+        if (weather.includes('cloud')) return ['jacket', 'shorts', 'shoes'];
+        if (weather.includes('clear')) return ['hat','t-shirt', 'shorts', 'shoes'];
+        return basicWarm; // базовий варіант для теплої погоди
     } else {
         if (weather.includes('rain')) return ['umbrella', 'jacket', 'trousers', 'boots'];
         if (weather.includes('snow')) return ['santa-hat', 'jacket', 'trousers', 'boots'];
         if (weather.includes('cloud')) return ['hat', 'jacket', 'trousers', 'shoes'];
-        return ['hat', 'jacket', 'trousers', 'shoes'];
+        return basicCold; // базовий варіант для холодної погоди
     }
 }
 const outfitCategories = {
@@ -280,6 +264,9 @@ function getLayerForClothing(itemName) {
 }
 
 function applyOutfit(clothes, prefix = '') {
+    const renderedLayers = new Set(); // відстежуємо, які шари вже зайняті
+
+    // очищаємо всі шари перед додаванням
     Object.values(outfitCategories).forEach(layer => {
         const el = document.getElementById(`${prefix}${layer}`);
         if (el) el.innerHTML = '';
@@ -288,15 +275,15 @@ function applyOutfit(clothes, prefix = '') {
     clothes.forEach(item => {
         const layer = getLayerForClothing(item);
         const el = document.getElementById(`${prefix}${layer}`);
-        if (el) {
+        if (layer && el && !renderedLayers.has(layer)) {
             const img = document.createElement('img');
             img.src = `/icons/outfit/${item}.png`;
             img.alt = item;
             el.appendChild(img);
+            renderedLayers.add(layer); // щоб більше нічого не додати в цей шар
         }
     });
 }
-
 async function renderCurrentOutfit(condition, temp) {
     const clothes = Outfit(condition, temp);
     const container = document.getElementById('current-outfit');
@@ -317,25 +304,6 @@ async function renderCurrentOutfit(condition, temp) {
 }
 
 
-function applyForecastOutfit(clothes, parent) {
-    const base = document.createElement('img');
-    base.src = '/icons/outfit/standing-man.png';
-    base.alt = 'Base Man';
-    base.style.position = 'absolute';
-    base.style.zIndex = '0';
-    parent.appendChild(base);
-
-    clothes.forEach(item => {
-        const layer = outfitCategories[item];
-        const div = document.createElement('div');
-        div.classList.add('outfit-layer', layer);
-        const img = document.createElement('img');
-        img.src = `/icons/outfit/${item}.png`;
-        img.alt = item;
-        div.appendChild(img);
-        parent.appendChild(div);
-    });
-}
 function renderForecastOutfit(clothes) {
     const container = document.createElement('div');
     container.className = 'forecast-outfit';
@@ -351,15 +319,18 @@ function renderForecastOutfit(clothes) {
         </div>
     `;
 
+    const renderedLayers = new Set();
+
     clothes.forEach(item => {
         const layer = getLayerForClothing(item);
-        const layerDiv = container.querySelector(`.${layer}`);
-        if (layerDiv) {
+        const targetLayer = container.querySelector(`.${layer}`);
+        if (layer && targetLayer && !renderedLayers.has(layer)) {
             const img = document.createElement('img');
             img.src = `/icons/outfit/${item}.png`;
             img.alt = item;
             img.classList.add('clothing-item');
-            layerDiv.appendChild(img);
+            targetLayer.appendChild(img);
+            renderedLayers.add(layer);
         }
     });
 
