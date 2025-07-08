@@ -328,7 +328,7 @@ function renderForecastOutfit(clothes) {
             const img = document.createElement('img');
             img.src = `/icons/outfit/${item}.png`;
             img.alt = item;
-            img.classList.add('clothing-item');
+            img.classList.add('clothing-item', item); // <== важливо!
             targetLayer.appendChild(img);
             renderedLayers.add(layer);
         }

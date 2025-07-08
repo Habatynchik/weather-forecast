@@ -304,18 +304,36 @@ body {
     position: absolute;
     pointer-events: none; /* щоб не заважали кліки */
 }
+.top-layer {
+    z-index: 3;
+}
 
+.bottom-layer {
+    z-index: 2;
+}
+
+.shoes-layer {
+    z-index: 1;
+}
+
+.head-layer {
+    z-index: 10;
+}
+
+.umbrella-layer {
+    z-index: 0; /* справа, не перекриває */
+}
 /* 🔼 ГОЛОВА */
 .head-layer {
-    top: -20px;
-    left: 55%;
+    top: -15px;
+    left: 53%;
     transform: translateX(-50%);
     width: 10px;
 }
 
 /* 🔽 ВЕРХНЯ ЧАСТИНА */
 .top-layer {
-    top: 20px;
+    top: 25px;
     left: 51%;
     transform: translateX(-50%);
     width: 60px;
@@ -323,15 +341,15 @@ body {
 
 /* 🔽 НИЖНЯ ЧАСТИНА */
 .bottom-layer {
-    top: 65px;
-    left: 50%;
+    top: 55px;
+    left: 51%;
     transform: translateX(-50%);
     width: 40px;
 }
 
 /* 🔽 ВЗУТТЯ */
 .shoes-layer {
-    bottom: 0;
+    top: 100px;
     left: 50%;
     transform: translateX(-50%);
     width: 50px;
@@ -344,5 +362,16 @@ body {
     transform: translateX(-20%);
     width: 50px;
 }
-
+.santa-hat {
+    transform: translateX(-5%);
+}
+.shorts{
+    transform: translateY(20%);
+}
+.t-shirt{
+    transform: translateY(-10%);
+}
+.shoes{
+    transform: translateX(2%);
+}
 
