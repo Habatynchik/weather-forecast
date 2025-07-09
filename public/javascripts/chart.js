@@ -16,7 +16,6 @@ function getWeatherIcon(condition) {
 }
 
 
-
 async function fetchCurrentWeather(city) {
     const res = await fetch(`/weather/current/${city}`);
     const data = await res.json();
@@ -71,7 +70,7 @@ function createChart(ctx, labels, data) {
 }
 
 async function renderCurrentWeather(city) {
-    const { temp, condition, name, humidity, wind } = await fetchCurrentWeather(city);
+    const {temp, condition, name, humidity, wind} = await fetchCurrentWeather(city);
     const icon = getWeatherIcon(condition);
 
     const container = document.getElementById('current-container');
@@ -98,23 +97,12 @@ async function renderCurrentWeather(city) {
       </div>
     </div>
   `;
-    let outfitDiv = document.getElementById('current-outfit');
-    if (!outfitDiv) {
-        outfitDiv = document.createElement('div');
-        outfitDiv.id = 'current-outfit';
-        outfitDiv.classList.add('current-outfit'); // або будь-який потрібний клас
-        container.appendChild(outfitDiv);
-    }
-
-// Об'єднуємо в один контейнер
-    container.appendChild(outfitDiv);
-    document.getElementById('current').innerHTML=`${temp}°C`;
-    document.getElementById('city').innerHTML=`${name}`;
+    document.getElementById('current').innerHTML = `${temp}°C`;
+    document.getElementById('city').innerHTML = `${name}`;
 
     const currentImg = container.querySelector('.weather-icon-hover');
     currentImg.addEventListener('mouseenter', () => currentImg.src = icon.animated);
     currentImg.addEventListener('mouseleave', () => currentImg.src = icon.static);
-    outfitDiv.style.display = 'flex';
 }
 
 
@@ -154,6 +142,7 @@ async function renderForecast(city) {
         createChart(ctx, entries.map(e => e.time), entries.map(e => e.temp));
     });
 }
+
 // === CITY SEARCH ===
 const input = document.getElementById('cityInput');
 const suggestions = document.getElementById('suggestions');
@@ -220,25 +209,25 @@ async function handleCitySearch(city) {
     if (city) {
         const current = await fetchCurrentWeather(city);             // 1. Отримуємо поточну погоду
         await renderCurrentWeather(city);                            // 2. Малюємо поточну погоду
-        await renderCurrentOutfit(current.condition, current.temp);  // 3. Малюємо одяг
         await renderForecast(city);                                  // 4. Малюємо прогноз
         input.value = city;
         suggestions.style.display = 'none';
     }
 }
+
 // --- Outfit Logic ---
 
 
 function Outfit(condition, temp) {
     const weather = condition.toLowerCase();
 
-    const basicWarm = ['t-shirt','trousers', 'shoes'];
+    const basicWarm = ['t-shirt', 'trousers', 'shoes'];
     const basicCold = ['santa-hat', 'jacket', 'trousers', 'boots'];
 
     if (temp >= 15) {
         if (weather.includes('rain')) return ['umbrella', 'jacket', 'trousers', 'shoes'];
         if (weather.includes('cloud')) return ['jacket', 'shorts', 'shoes'];
-        if (weather.includes('clear')) return ['hat','t-shirt', 'shorts', 'shoes'];
+        if (weather.includes('clear')) return ['hat', 't-shirt', 'shorts', 'shoes'];
         return basicWarm; // базовий варіант для теплої погоди
     } else {
         if (weather.includes('rain')) return ['umbrella', 'jacket', 'trousers', 'boots'];
@@ -247,6 +236,7 @@ function Outfit(condition, temp) {
         return basicCold; // базовий варіант для холодної погоди
     }
 }
+
 const outfitCategories = {
     'hat': 'head-layer',
     'santa-hat': 'head-layer',
@@ -284,24 +274,7 @@ function applyOutfit(clothes, prefix = '') {
         }
     });
 }
-async function renderCurrentOutfit(condition, temp) {
-    const clothes = Outfit(condition, temp);
-    const container = document.getElementById('current-outfit');
-    container.style.display = 'flex';
 
-    container.innerHTML = `
-        <div class="outfit-wrapper-inner">
-            <img src="/icons/outfit/standing-man.png" alt="Base Man">
-            <div id="head-layer" class="outfit-layer"></div>
-            <div id="top-layer" class="outfit-layer"></div>
-            <div id="bottom-layer" class="outfit-layer"></div>
-            <div id="shoes-layer" class="outfit-layer"></div>
-            <div id="umbrella-layer" class="outfit-layer"></div>
-        </div>
-    `;
-
-    applyOutfit(clothes);
-}
 
 
 function renderForecastOutfit(clothes) {
@@ -310,6 +283,7 @@ function renderForecastOutfit(clothes) {
 
     container.innerHTML = `
         <div class="outfit-wrapper-inner">
+        <h5>Recommended clothing</h5>
             <img src="/icons/outfit/standing-man.png" alt="Base Man" class="base-man">
             <div class="outfit-layer head-layer"></div>
             <div class="outfit-layer top-layer"></div>
@@ -318,18 +292,33 @@ function renderForecastOutfit(clothes) {
             <div class="outfit-layer umbrella-layer"></div>
         </div>
     `;
-
     const renderedLayers = new Set();
 
     clothes.forEach(item => {
         const layer = getLayerForClothing(item);
         const targetLayer = container.querySelector(`.${layer}`);
         if (layer && targetLayer && !renderedLayers.has(layer)) {
+            const wrapper = document.createElement('div');
+            wrapper.style.display = 'flex';
+            wrapper.style.alignItems = 'center';
+            wrapper.style.position = 'absolute'; // накладається на чоловічка
+
             const img = document.createElement('img');
             img.src = `/icons/outfit/${item}.png`;
             img.alt = item;
-            img.classList.add('clothing-item', item); // <== важливо!
-            targetLayer.appendChild(img);
+            img.classList.add('clothing-item', item);
+
+            const label = document.createElement('span');
+            label.textContent = item;
+            label.style.color = 'black';
+            label.style.marginLeft = '5px';
+            label.style.fontSize = '12px';
+            label.style.position = 'relative';
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(label);
+            targetLayer.appendChild(wrapper);
+
             renderedLayers.add(layer);
         }
     });
