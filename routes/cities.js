@@ -13,5 +13,17 @@ router.get('/', async (req, res) => {
         res.status(500).json({ error: 'Помилка при пошуку міста' });
     }
 });
-
+try {
+    const { q } = req.query;
+    const response = await axios.get('https://api.api-ninjas.com/v1/city', {
+        params: { name: q },
+        headers: {
+            'X-Api-Key': process.env.API_NINJA_KEY
+        }
+    });
+    res.json(response.data);
+} catch (error) {
+    console.error('Error from API Ninjas:', error.message);
+    res.status(500).json([]);
+}
 module.exports = router;

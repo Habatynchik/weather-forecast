@@ -104,7 +104,10 @@ body {
 #suggestions li:hover {
     background-color: #d0e4ff;
 }
-
+#forecast-container{
+    justify-content: center;
+    align-items: flex-start;
+}
 #forecast-container,
 #outfit-wrapper-inner {
     background: rgba(255, 255, 255, 0.15);
