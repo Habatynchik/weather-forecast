@@ -72,7 +72,6 @@ function createChart(ctx, labels, data) {
 async function renderCurrentWeather(city) {
     const {temp, condition, name, humidity, wind} = await fetchCurrentWeather(city);
     const icon = getWeatherIcon(condition);
-
     const container = document.getElementById('current-container');
     container.style.display = 'flex';
     container.innerHTML = `
@@ -118,28 +117,35 @@ async function renderForecast(city) {
         const avgTemp = Math.round(entries.reduce((sum, e) => sum + e.temp, 0) / entries.length);
         const condition = entries[0].condition;
         const clothes = Outfit(condition, avgTemp);
+        const icon = getWeatherIcon(condition); // ← тепер condition уже існує!
 
-        // === Прогноз погоди (окремо) ===
+        // === Прогноз погоди ===
         const weatherDiv = document.createElement('div');
         weatherDiv.className = 'forecast-day';
         weatherDiv.innerHTML = `
             <h3>${day}</h3>
-            <img src="/icons/static/${normalizeCondition(condition)}.png" class="weather-icon-hover">
+            <img src="${icon.static}" data-hover="${icon.animated}" class="weather-icon-hover">
             <canvas id="chart-${i}" width="250" height="100"></canvas>
         `;
 
-        // === Одяг (окремо) ===
-        const outfitDiv = renderForecastOutfit(clothes); // окремий outfitDiv
+        // === Одяг ===
+        const outfitDiv = renderForecastOutfit(clothes);
 
-        // === Обʼєднання у wrapper ===
+        // === Обгортка
         const wrapper = document.createElement('div');
         wrapper.className = 'forecast-day-wrapper';
         wrapper.appendChild(weatherDiv);
-        wrapper.appendChild(outfitDiv); // додаємо outfit як окремий div
+        wrapper.appendChild(outfitDiv);
         container.appendChild(wrapper);
 
+        // графік
         const ctx = document.getElementById(`chart-${i}`);
         createChart(ctx, entries.map(e => e.time), entries.map(e => e.temp));
+
+        // анімація іконки
+        const currentImg = weatherDiv.querySelector('.weather-icon-hover');
+        currentImg.addEventListener('mouseenter', () => currentImg.src = icon.animated);
+        currentImg.addEventListener('mouseleave', () => currentImg.src = icon.static);
     });
 }
 
@@ -299,9 +305,10 @@ function renderForecastOutfit(clothes) {
         const targetLayer = container.querySelector(`.${layer}`);
         if (layer && targetLayer && !renderedLayers.has(layer)) {
             const wrapper = document.createElement('div');
+            wrapper.style.position = 'relative';
             wrapper.style.display = 'flex';
             wrapper.style.alignItems = 'center';
-            wrapper.style.position = 'absolute'; // накладається на чоловічка
+            wrapper.style.justifyContent = 'flex-start'; // накладається на чоловічка
 
             const img = document.createElement('img');
             img.src = `/icons/outfit/${item}.png`;
@@ -310,11 +317,12 @@ function renderForecastOutfit(clothes) {
 
             const label = document.createElement('span');
             label.textContent = item;
-            label.style.color = 'black';
-            label.style.marginLeft = '5px';
-            label.style.fontSize = '12px';
-            label.style.position = 'relative';
-
+            label.style.marginLeft = '8px';
+            label.style.whiteSpace = 'nowrap';
+            label.style.fontWeight = 'bold';
+            label.style.fontFamily = 'Inter, sans-serif';
+            label.style.fontSize = '13px';
+            label.style.color = '#222';
             wrapper.appendChild(img);
             wrapper.appendChild(label);
             targetLayer.appendChild(wrapper);
