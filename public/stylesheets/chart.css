@@ -294,7 +294,7 @@ body {
 
 /* 🔽 ВЕРХНЯ ЧАСТИНА */
 .top-layer {
-    top: 55px;
+    top: 59px;
     left: 53%;
     transform: translateX(-23%);
     width: 60px;
@@ -325,9 +325,8 @@ body {
     width: 40px;
 }
 
-.hat{
-    top: 30px;
-    transform: translateX(-30%);
+.sun-hat{
+    transform: translateX(-10%);
 }
 
 .shorts {
@@ -344,5 +343,10 @@ body {
     transform: translateY(-10%);
 }
 .t-shirt{
-    transform: translateY(2%);
+    transform:translateX(2%);
+}
+
+
+.jacket{
+    transform: translateY(5%);
 }

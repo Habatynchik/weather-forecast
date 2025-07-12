@@ -228,24 +228,24 @@ function Outfit(condition, temp) {
     const weather = condition.toLowerCase();
 
     const basicWarm = ['t-shirt', 'trousers', 'shoes'];
-    const basicCold = ['santa-hat', 'jacket', 'trousers', 'boots'];
+    const basicCold = ['winter-hat', 'jacket', 'trousers', 'boots'];
 
     if (temp >= 15) {
         if (weather.includes('rain')) return ['umbrella', 'jacket', 'trousers', 'shoes'];
         if (weather.includes('cloud')) return ['jacket', 'shorts', 'shoes'];
-        if (weather.includes('clear')) return ['hat', 't-shirt', 'shorts', 'shoes'];
+        if (weather.includes('clear')) return ['sun-hat', 't-shirt', 'shorts', 'shoes'];
         return basicWarm; // базовий варіант для теплої погоди
     } else {
         if (weather.includes('rain')) return ['umbrella', 'jacket', 'trousers', 'boots'];
-        if (weather.includes('snow')) return ['santa-hat', 'jacket', 'trousers', 'boots'];
-        if (weather.includes('cloud')) return ['hat', 'jacket', 'trousers', 'shoes'];
+        if (weather.includes('snow')) return ['winter-hat', 'jacket', 'trousers', 'boots'];
+        if (weather.includes('cloud')) return ['sun-hat', 'jacket', 'trousers', 'shoes'];
         return basicCold; // базовий варіант для холодної погоди
     }
 }
 
 const outfitCategories = {
-    'hat': 'head-layer',
-    'santa-hat': 'head-layer',
+    'sun-hat': 'head-layer',
+    'winter-hat': 'head-layer',
     'jacket': 'top-layer',
     't-shirt': 'top-layer',
     'shorts': 'bottom-layer',
@@ -317,11 +317,11 @@ function renderForecastOutfit(clothes) {
 
             const label = document.createElement('span');
             label.textContent = item;
-            label.style.marginLeft = '8px';
+            label.style.marginLeft = '13px';
             label.style.whiteSpace = 'nowrap';
             label.style.fontWeight = 'bold';
             label.style.fontFamily = 'Inter, sans-serif';
-            label.style.fontSize = '13px';
+            label.style.fontSize = '11px';
             label.style.color = '#222';
             wrapper.appendChild(img);
             wrapper.appendChild(label);
