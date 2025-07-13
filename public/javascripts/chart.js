@@ -287,53 +287,62 @@ function renderForecastOutfit(clothes) {
     const container = document.createElement('div');
     container.className = 'forecast-outfit';
 
-    container.innerHTML = `
-        <div class="outfit-wrapper-inner">
+    // 🔷 Батьківський блок з flex-розташуванням: чоловічок + підписи
+    const layout = document.createElement('div');
+    layout.style.display = 'flex';
+    layout.style.flexDirection = 'row';
+    layout.style.gap = '16px';
+    layout.style.alignItems = 'flex-start';
+
+    // 🔷 Блок outfit-wrapper-inner — залишаємо як є
+    const outfitWrapper = document.createElement('div');
+    outfitWrapper.className = 'outfit-wrapper-inner';
+    outfitWrapper.innerHTML = `
         <h5>Recommended clothing</h5>
-            <img src="/icons/outfit/standing-man.png" alt="Base Man" class="base-man">
-            <div class="outfit-layer head-layer"></div>
-            <div class="outfit-layer top-layer"></div>
-            <div class="outfit-layer bottom-layer"></div>
-            <div class="outfit-layer shoes-layer"></div>
-            <div class="outfit-layer umbrella-layer"></div>
-        </div>
+        <img src="/icons/outfit/standing-man.png" alt="Base Man" class="base-man">
+        <div class="outfit-layer head-layer"></div>
+        <div class="outfit-layer top-layer"></div>
+        <div class="outfit-layer bottom-layer"></div>
+        <div class="outfit-layer shoes-layer"></div>
+        <div class="outfit-layer umbrella-layer"></div>
     `;
+
+    // 🔷 Блок для текстів праворуч
+    const labelsContainer = document.createElement('div');
+    labelsContainer.style.display = 'flex';
+    labelsContainer.style.flexDirection = 'column';
+    labelsContainer.style.gap = '20px';
+    labelsContainer.style.paddingTop = '30px';
+
     const renderedLayers = new Set();
 
     clothes.forEach(item => {
         const layer = getLayerForClothing(item);
-        const targetLayer = container.querySelector(`.${layer}`);
+        const targetLayer = outfitWrapper.querySelector(`.${layer}`);
         if (layer && targetLayer && !renderedLayers.has(layer)) {
-            const wrapper = document.createElement('div');
-            wrapper.style.position = 'relative';
-            wrapper.style.display = 'flex';
-            wrapper.style.alignItems = 'center';
-            wrapper.style.justifyContent = 'flex-start'; // накладається на чоловічка
-
+            // Додаємо одяг
             const img = document.createElement('img');
             img.src = `/icons/outfit/${item}.png`;
             img.alt = item;
             img.classList.add('clothing-item', item);
+            targetLayer.appendChild(img);
+            renderedLayers.add(layer);
 
+            // Додаємо назву
             const label = document.createElement('span');
             label.textContent = item;
-            label.style.marginLeft = '13px';
-            label.style.whiteSpace = 'nowrap';
-            label.style.fontWeight = 'bold';
-            label.style.fontFamily = 'Inter, sans-serif';
             label.style.fontSize = '11px';
+            label.style.fontFamily = 'Inter, sans-serif';
             label.style.color = '#222';
-            wrapper.appendChild(img);
-            wrapper.appendChild(label);
-            targetLayer.appendChild(wrapper);
-
-            renderedLayers.add(layer);
+            label.style.fontWeight = '500';
+            labelsContainer.appendChild(label);
         }
     });
 
+    // Об'єднуємо обидва блоки
+    layout.appendChild(outfitWrapper);
+    layout.appendChild(labelsContainer);
+    container.appendChild(layout);
+
     return container;
 }
-
-
-
-
