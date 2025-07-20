@@ -291,7 +291,7 @@ function renderForecastOutfit(clothes) {
     const layout = document.createElement('div');
     layout.style.display = 'flex';
     layout.style.flexDirection = 'row';
-    layout.style.gap = '16px';
+    layout.style.gap = '10px';
     layout.style.alignItems = 'flex-start';
 
     // 🔷 Блок outfit-wrapper-inner — залишаємо як є
@@ -311,8 +311,9 @@ function renderForecastOutfit(clothes) {
     const labelsContainer = document.createElement('div');
     labelsContainer.style.display = 'flex';
     labelsContainer.style.flexDirection = 'column';
-    labelsContainer.style.gap = '20px';
-    labelsContainer.style.paddingTop = '30px';
+    labelsContainer.style.gap = '30px';
+    labelsContainer.style.paddingTop = '25px';
+
 
     const renderedLayers = new Set();
 
@@ -335,6 +336,7 @@ function renderForecastOutfit(clothes) {
             label.style.fontFamily = 'Inter, sans-serif';
             label.style.color = '#222';
             label.style.fontWeight = '500';
+            label.style.whiteSpace = 'nowrap';
             labelsContainer.appendChild(label);
         }
     });
