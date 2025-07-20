@@ -1,23 +1,31 @@
-body {
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+
 
 a {
     color: #00B7FF;
 }
 
-
 body {
+    min-height: 100vh;
     margin: 0;
-    font-family: Arial, sans-serif;
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(to bottom right, #4a90e2, #50e3c2);
+    color: white;
+    animation: fadeIn 1s ease-in-out;
 }
 header {
     display: flex;
     align-items: center;
+    justify-content: space-between; /* якщо потрібно розвести по краях */
     background-color: #222;
     color: white;
+    width: 100%;
     padding: 10px 20px;
-    position: relative;
+    position: fixed;   /* зміна */
+    top: 0;            /* прив'язка до верху */
+    left: 0;
+    z-index: 1000;     /* поверх інших елементів */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* для глибини */
 }
 
 /* Logo and nickname on right */
@@ -215,7 +223,6 @@ header {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    height: 60px;
     font-size: 16px;
     transition: all 0.5s;
 }

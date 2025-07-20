@@ -76,11 +76,7 @@ html, body {
   height: 100%;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-}
+
 
 /* Keep header fixed height */
 header {

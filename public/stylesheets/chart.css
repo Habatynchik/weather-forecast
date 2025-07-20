@@ -23,7 +23,7 @@ body {
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 20px;
+    margin-top: 60px;
 }
 
 .input-wrapper {
@@ -120,9 +120,9 @@ body {
 
 /* Прогноз ширший, займає простір */
 #forecast-container {
+    display: none;
     flex: 1;
-    min-width: 300px;
-    display: none; /* ховаємо за замовчуванням */
+    min-width: 300px; /* ховаємо за замовчуванням */
     flex-wrap: wrap;
     gap: 20px;
 }
@@ -189,9 +189,9 @@ body {
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
-    gap: 30px;
     margin-bottom: 20px;
     min-height: 300px; /* ← це головне */
+    margin-top: 60px;
 }
 
 .forecast-day-wrapper {
@@ -199,7 +199,7 @@ body {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 20px;
+    gap: 10px;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 10px;
